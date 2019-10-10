@@ -96,72 +96,57 @@ namespace VisualizationRecorder {
                                                                  group rect by Canvas.GetTop(rect);
             double minLeftGroupKey = leftGroup.Min(group => group.Key);
             double minTopGroupKey = topGroup.Min(group => group.Key);
-            IGrouping<double, UIElement> minLeftGroup = (from g in leftGroup
-                                                         where g.Key == minLeftGroupKey
-                                                         select g).First();
-            IGrouping<double, UIElement> minTopGroup = (from g in topGroup
-                                                        where g.Key == minTopGroupKey
-                                                        select g).First();
+            IGrouping<double, UIElement> res1 = (from g in leftGroup
+                                                 where g.Key == minLeftGroupKey
+                                                 select g).First();
+            IGrouping<double, UIElement> res2 = (from g in topGroup
+                                                 where g.Key == minTopGroupKey
+                                                 select g).First();
 
             /*
              * 给周一、周三、周五的方块打上标记 Mon、Wed、Fri
              */
-            foreach (Rectangle rect in minLeftGroup) {
+            foreach (Rectangle rect in res1) {
                 if (DatetimeParser.ParseExpressToDateTime((rect as Rectangle).Name, DateMode.DateWithSlash).DayOfWeek == DayOfWeek.Monday ||
                     DatetimeParser.ParseExpressToDateTime((rect as Rectangle).Name, DateMode.DateWithSlash).DayOfWeek == DayOfWeek.Wednesday ||
                     DatetimeParser.ParseExpressToDateTime((rect as Rectangle).Name, DateMode.DateWithSlash).DayOfWeek == DayOfWeek.Friday) {
-                    var tag = new TextBlock() {
+                    var tbx = new TextBlock() {
                         Text = DatetimeParser.ParseExpressToDateTime((rect as Rectangle).Name, DateMode.DateWithSlash).DayOfWeek.ToString().Substring(0, 3),
                         FontSize = 10,
                         Foreground = new SolidColorBrush(Windows.UI.Colors.Gray)
                     };
-                    Canvas.SetLeft(tag, Canvas.GetLeft(rect) - 30);
-                    Canvas.SetTop(tag, Canvas.GetTop(rect));
-                    canvas.Children.Add(tag);
+                    Canvas.SetLeft(tbx, Canvas.GetLeft(rect) - 30);
+                    Canvas.SetTop(tbx, Canvas.GetTop(rect));
+                    canvas.Children.Add(tbx);
                 }
             }
 
             /*
              * 给每个月份开头的方块打上标记，从 Jan 到 Dec
              */
-            Rectangle previousRect = null;
-            TextBlock previousTag = null;
-            foreach (Rectangle rect in minTopGroup.Reverse()) {
+            Rectangle previous = null;
+            foreach (Rectangle rect in res2.Reverse()) {
                 void setTopTag(string text) {
-                    var tag = new TextBlock() {
+                    var tbx = new TextBlock() {
                         Text = text,
                         FontSize = 10,
                         Foreground = new SolidColorBrush(Windows.UI.Colors.Gray)
                     };
-                    if (previousTag == null) {
-                        Canvas.SetLeft(tag, Canvas.GetLeft(rect));
-                    }
-                    else {
-                        if (Canvas.GetLeft(rect) - Canvas.GetLeft(previousTag) - previousTag.ActualWidth > 0) {
-                            Canvas.SetLeft(tag, Canvas.GetLeft(rect));
-                        }
-                        else {
-                            /*
-                             * 如果当前需要标记 tag 的方块的前一个方块已经标记 tag，
-                             * 那么当前 tag 需要往右移动一个方块从而避免两个 tag 重叠
-                             */
-                            Canvas.SetLeft(tag, Canvas.GetLeft(rect) + rect.Width);
-                        }
-                    }
-                    Canvas.SetTop(tag, Canvas.GetTop(rect) - 15);
-                    canvas.Children.Add(tag);
+                    Canvas.SetLeft(tbx, Canvas.GetLeft(rect));
+                    Canvas.SetTop(tbx, Canvas.GetTop(rect) - 15);
+                    canvas.Children.Add(tbx);
                 }
-                if (previousRect == null) {
+                if (previous == null) {
                     setTopTag(DatetimeParser.NumberToMonth(DatetimeParser.ParseExpressToDateTime(rect.Name, DateMode.DateWithSlash).Month));
                 }
                 else {
-                    int monthOfPreviousRectangle = DatetimeParser.ParseExpressToDateTime(previousRect.Name, DateMode.DateWithSlash).Month;
+                    int monthOfPreviousRectangle = DatetimeParser.ParseExpressToDateTime(previous.Name, DateMode.DateWithSlash).Month;
                     int monthOfCurrentRectangle = DatetimeParser.ParseExpressToDateTime(rect.Name, DateMode.DateWithSlash).Month;
                     if (monthOfCurrentRectangle != monthOfPreviousRectangle) {
                         setTopTag(DatetimeParser.NumberToMonth(DatetimeParser.ParseExpressToDateTime(rect.Name, DateMode.DateWithSlash).Month));
                     }
                 }
-                previousRect = rect;
+                previous = rect;
             }
         }
 
