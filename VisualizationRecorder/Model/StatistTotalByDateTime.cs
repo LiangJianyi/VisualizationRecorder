@@ -101,7 +101,7 @@ namespace VisualizationRecorder {
         private readonly SortedList<DateTime, StatistTotalByDateTime> _entries = new SortedList<DateTime, StatistTotalByDateTime>();
         public SortedList<DateTime, StatistTotalByDateTime> Entries => _entries;
         /// <summary>
-        /// 该构造器接收一个字符串序列，把它转换成StatistTotalByDateTime链表
+        /// 该构造器接收一个字符串序列，把它转换成 StatistTotalByDateTime 序列
         /// </summary>
         /// <param name="lines">文本序列</param>
         public StatistTotalByDateTimeModel(IEnumerable<string> lines) {
@@ -110,6 +110,16 @@ namespace VisualizationRecorder {
                     StatistTotalByDateTime statist = DatetimeParser.ParseExpressToStatistTotalByDateTime(line);
                     this.Add(statist);
                 }
+            }
+        }
+
+        /// <summary>
+        /// 该构造器接收一个 StatistTotalByDateTime 序列
+        /// </summary>
+        /// <param name="statistTotalByDateTimes"></param>
+        public StatistTotalByDateTimeModel(IEnumerable<StatistTotalByDateTime> statistTotalByDateTimes) {
+            foreach (var statist in statistTotalByDateTimes) {
+                this.Add(statist);
             }
         }
 

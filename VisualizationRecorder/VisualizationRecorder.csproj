@@ -189,6 +189,10 @@
       <Project>{46ca3186-2216-4a9e-b542-ec6356e0df8a}</Project>
       <Name>BigIntegerExtension</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\SundryUtilty\.NET Standard\Sucker\SuckerInterpreter\SuckerInterpreter.csproj">
+      <Project>{2dd5f2c5-e0e9-4001-830b-1f8836b868c7}</Project>
+      <Name>SuckerInterpreter</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

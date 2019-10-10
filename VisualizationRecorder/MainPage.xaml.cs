@@ -11,6 +11,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Shapes;
 using VisualizationRecorder.CommonTool;
 using Windows.UI.Xaml.Navigation;
+using Janyee.Utilty;
 
 namespace VisualizationRecorder {
     using Debug = System.Diagnostics.Debug;
@@ -71,8 +72,33 @@ namespace VisualizationRecorder {
                 Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.Add(_file);
                 string text = await FileIO.ReadTextAsync(_file);
                 try {
-                    IEnumerable<string> lines = DatetimeParser.SplitByLine(text);
-                    _model = new StatistTotalByDateTimeModel(lines);
+                    if (_file.FileType == ".txt") {
+                        IEnumerable<string> lines = DatetimeParser.SplitByLine(text);
+                        _model = new StatistTotalByDateTimeModel(lines);
+                    }
+                    else if (_file.FileType == ".mast") {
+                        JymlAST.Cons ast = JymlParser.Parser.GenerateAst(text);
+                        Interpreter.SuckerMLInterpreter.Sucker sucker = Interpreter.SuckerMLInterpreter.Eval(ast);
+                        List<StatistTotalByDateTime> statistTotalByDateTimes = new List<StatistTotalByDateTime>();
+                        foreach (var year in sucker.Years) {
+                            foreach (var month in year.Value.Months) {
+                                foreach (var day in month.Value.Days) {
+                                    statistTotalByDateTimes.Add(new StatistTotalByDateTime() {
+                                        DateTime = new DateTime(
+                                            year: year.Value.Year.BigIntegerToInt32(),
+                                            month: month.Value.Month,
+                                            day: day.Value.Day
+                                        ),
+                                        Total = day.Value.Total
+                                    });
+                                }
+                            }
+                        }
+                        _model = new StatistTotalByDateTimeModel(statistTotalByDateTimes);
+                    }
+                    else {
+                        throw new FilePickFaildException($"错误的文件类型：{_file.FileType}");
+                    }
                     ExtendStackCanvasByFilterOldRecorders(EarlierThanEarliestRectangle(_model.ToStatistTotalByDateTimeArray().ToList(), _earliestRectangle), _earliestRectangle);
                     ProgressBoard.CancelOn(CurrentRectanglesCanvas, progressBoard);
                     foreach (Canvas canvas in StackCanvas.Children) {
@@ -96,7 +122,10 @@ namespace VisualizationRecorder {
                 catch (ArgumentException err) {
                     PopErrorDialogAsync(err.Message);
                 }
-                _saveMode = SaveMode.OrginalFile; // 表示当前的操作基于磁盘上已有的文件
+                catch (FilePickFaildException err) {
+                    PopErrorDialogAsync(err.Message);
+                }
+                _saveMode = SaveMode.OrginalFile; // 表示当前的操作基于磁盘上已有的文件 
             }
         }
 
