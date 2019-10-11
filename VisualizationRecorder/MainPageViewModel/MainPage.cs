@@ -132,6 +132,9 @@ namespace VisualizationRecorder {
                         FontSize = 10,
                         Foreground = new SolidColorBrush(Windows.UI.Colors.Gray)
                     };
+                    tbx.Loaded += (object sender, RoutedEventArgs e) => {
+                        Debug.WriteLine($"tbx.ActualWidth: {tbx.ActualWidth}");
+                    };
                     Canvas.SetLeft(tbx, Canvas.GetLeft(rect));
                     Canvas.SetTop(tbx, Canvas.GetTop(rect) - 15);
                     canvas.Children.Add(tbx);
@@ -392,14 +395,14 @@ namespace VisualizationRecorder {
         /// 新生成的面板中着色日期更久远的记录。
         /// </summary>
         private void ExtendStackCanvasByFilterOldRecorders(List<StatistTotalByDateTime> oldRecorders, Rectangle earliestRectangle, int canvasOrdinal = 1) {
-            Canvas oldRectanglesCanvas = new Canvas() {
-                Name = $"OldRectanglesCanvas_{canvasOrdinal}"
-            };
-            Rectangle oldRect = this.RectanglesLayout(oldRectanglesCanvas, DatetimeParser.ParseExpressToDateTime(earliestRectangle.Name, DateMode.DateWithSlash).AddDays(-1));
-            DateTag(oldRectanglesCanvas);
-            this.StackCanvas.Children.Insert(0, oldRectanglesCanvas);
-            List<StatistTotalByDateTime> newOldRecorders = EarlierThanEarliestRectangle(oldRecorders, oldRect);
-            if (newOldRecorders.Count > 0) {
+            if (oldRecorders != null && oldRecorders.Count > 0) {
+                Canvas oldRectanglesCanvas = new Canvas() {
+                    Name = $"OldRectanglesCanvas_{canvasOrdinal}"
+                };
+                Rectangle oldRect = this.RectanglesLayout(oldRectanglesCanvas, DatetimeParser.ParseExpressToDateTime(earliestRectangle.Name, DateMode.DateWithSlash).AddDays(-1));
+                DateTag(oldRectanglesCanvas);
+                this.StackCanvas.Children.Insert(0, oldRectanglesCanvas);
+                List<StatistTotalByDateTime> newOldRecorders = EarlierThanEarliestRectangle(oldRecorders, oldRect);
                 ExtendStackCanvasByFilterOldRecorders(newOldRecorders, oldRect, canvasOrdinal + 1);
             }
         }
