@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Source>Z:\Desktop\icon\1240-1240 暗灰白.png</Source>
+    <SmallTileSource>Z:\Desktop\icon\1240-1240 暗灰白.png</SmallTileSource>
+    <MediumTileSource>Z:\Desktop\icon\1240-1240 暗灰白.png</MediumTileSource>
+    <WideTileSource>Z:\Desktop\icon\1240-1240 暗灰白.png</WideTileSource>
+    <LargeTileSource>Z:\Desktop\icon\1240-1240 暗灰白.png</LargeTileSource>
+    <AppIconSource>Z:\Desktop\icon\1240-1240 暗灰白.png</AppIconSource>
+    <SplashScreenSource>Z:\Desktop\icon\1240-1240 暗灰白.png</SplashScreenSource>
+    <PackageLogoSource>Z:\Desktop\icon\1240-1240 暗灰白.png</PackageLogoSource>
+  </PropertyGroup>
+</Project>
