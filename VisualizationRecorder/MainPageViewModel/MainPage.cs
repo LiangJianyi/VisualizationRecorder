@@ -124,32 +124,53 @@ namespace VisualizationRecorder {
             /*
              * 给每个月份开头的方块打上标记，从 Jan 到 Dec
              */
-            Rectangle previous = null;
+            Rectangle previousRect = null;
+            // 每个标记创建完成后会同对应的方块一起写入该列表
+            List<(TextBlock Tag, Rectangle TagedRect)> tagList = new List<(TextBlock Tag, Rectangle TagedRect)>();
             foreach (Rectangle rect in res2.Reverse()) {
                 void setTopTag(string text) {
-                    var tbx = new TextBlock() {
+                    var tag = new TextBlock() {
                         Text = text,
                         FontSize = 10,
                         Foreground = new SolidColorBrush(Windows.UI.Colors.Gray)
                     };
-                    tbx.Loaded += (object sender, RoutedEventArgs e) => {
-                        Debug.WriteLine($"tbx.ActualWidth: {tbx.ActualWidth}");
+                    Canvas.SetLeft(tag, Canvas.GetLeft(rect));
+                    Canvas.SetTop(tag, Canvas.GetTop(rect) - 15);
+                    tagList.Add((tag, rect));
+                    /*
+                     * 采用下面的设计是因为 TextBlock.ActualWidth 只有在控件加载完成后（Loaded）才会产生有效值，
+                     * TextBlock.ActualWidth 是检测两个 tag 是否重叠的关键参数，检测公式为：
+                     * Canvas.GetLeft(tagList[i].Tag) - Canvas.GetLeft(tagList[i - 1].Tag) - tagList[i - 1].Tag.ActualWidth <= 0
+                     * 当该表达式为 true，表明 tagList 中某两个相邻的 tag 发生重叠，需要将右边的 tag 往右移动一个方块的距离避免重叠。
+                     * 当 today 为一年中的某些天时，RectanglesCanvas 的第一列和第二列会是两个相邻的月份，如此紧凑的距离会导致他们顶部
+                     * 的标记重叠，一个例子是 today 为 10/12/2019，当输入的纪录中含有 2017 年的记录时，那么渲染 2017 年对应的 RectanglesCanvas
+                     * 会导致该 Canvas 的第一列和第二列的顶部标记重叠。
+                     * 
+                     * tag.Loaded 事件函数的作用是对 tagList 中的 tag 进行距离检测，当所有的 tag 在 setTopTag 函数中
+                     * 创建完毕后，UI 开始加载 Canvas 中的 UIElement，这个过程会触发每个 tag 的 Loaded 事件，通过 Loaded
+                     * 事件对每个 tag 的距离进行轮询。
+                     */
+                    tag.Loaded += (object sender, RoutedEventArgs e) => {
+                        for (int i = 1; i < tagList.Count - 1; i++) {
+                            if (Canvas.GetLeft(tagList[i].Tag) - Canvas.GetLeft(tagList[i - 1].Tag) - tagList[i - 1].Tag.ActualWidth <= 0) {
+                                Debug.WriteLine($"Canvas.GetLeft(list[{i}].Tag) - Canvas.GetLeft(list[{i - 1}].Tag) - list[{i - 1}].Tag.ActualWidth = {Canvas.GetLeft(tagList[i].Tag)} - {Canvas.GetLeft(tagList[i - 1].Tag)} - {tagList[i - 1].Tag.ActualWidth} = {Canvas.GetLeft(tagList[i].Tag) - Canvas.GetLeft(tagList[i - 1].Tag) - tagList[i - 1].Tag.ActualWidth}");
+                                Canvas.SetLeft(tagList[i].Tag, Canvas.GetLeft(tagList[i].Tag) + tagList[i].TagedRect.Width);
+                            }
+                        }
                     };
-                    Canvas.SetLeft(tbx, Canvas.GetLeft(rect));
-                    Canvas.SetTop(tbx, Canvas.GetTop(rect) - 15);
-                    canvas.Children.Add(tbx);
+                    canvas.Children.Add(tag);
                 }
-                if (previous == null) {
+                if (previousRect == null) {
                     setTopTag(DatetimeParser.NumberToMonth(DatetimeParser.ParseExpressToDateTime(rect.Name, DateMode.DateWithSlash).Month));
                 }
                 else {
-                    int monthOfPreviousRectangle = DatetimeParser.ParseExpressToDateTime(previous.Name, DateMode.DateWithSlash).Month;
+                    int monthOfPreviousRectangle = DatetimeParser.ParseExpressToDateTime(previousRect.Name, DateMode.DateWithSlash).Month;
                     int monthOfCurrentRectangle = DatetimeParser.ParseExpressToDateTime(rect.Name, DateMode.DateWithSlash).Month;
                     if (monthOfCurrentRectangle != monthOfPreviousRectangle) {
                         setTopTag(DatetimeParser.NumberToMonth(DatetimeParser.ParseExpressToDateTime(rect.Name, DateMode.DateWithSlash).Month));
                     }
                 }
-                previous = rect;
+                previousRect = rect;
             }
         }
 
@@ -401,6 +422,14 @@ namespace VisualizationRecorder {
                 };
                 Rectangle oldRect = this.RectanglesLayout(oldRectanglesCanvas, DatetimeParser.ParseExpressToDateTime(earliestRectangle.Name, DateMode.DateWithSlash).AddDays(-1));
                 DateTag(oldRectanglesCanvas);
+                oldRectanglesCanvas.Loaded += (object sender, RoutedEventArgs e) => {
+                    Canvas canvas = sender as Canvas;
+                    foreach (var item in canvas.Children) {
+                        if (item is TextBlock tag) {
+                            Debug.WriteLine($"tag.ActualWidth: {tag.ActualWidth}");
+                        }
+                    }
+                };
                 this.StackCanvas.Children.Insert(0, oldRectanglesCanvas);
                 List<StatistTotalByDateTime> newOldRecorders = EarlierThanEarliestRectangle(oldRecorders, oldRect);
                 ExtendStackCanvasByFilterOldRecorders(newOldRecorders, oldRect, canvasOrdinal + 1);

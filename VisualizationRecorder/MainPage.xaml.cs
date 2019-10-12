@@ -295,8 +295,11 @@ namespace VisualizationRecorder {
             SaveFileButton.Visibility = Visibility.Collapsed;
             RefreshButton.Visibility = Visibility.Collapsed;
             ClearButton.Visibility = Visibility.Collapsed;
-            DateTag(CurrentRectanglesCanvas);
             UpdateMainPageLayout();
+        }
+
+        private void RootCanvas_Loading(FrameworkElement sender, object args) {
+            DateTag(CurrentRectanglesCanvas);
         }
 
         /// <summary>
