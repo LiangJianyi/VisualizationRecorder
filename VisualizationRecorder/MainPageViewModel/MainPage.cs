@@ -267,7 +267,7 @@ namespace VisualizationRecorder {
 #else
             ToolTip toolTip = new ToolTip {
                 Content = dateTime.ToShortDateString()
-            }; 
+            };
 #endif
             ToolTipService.SetToolTip(rect, toolTip);
             rectanglesCanvas.Children.Add(rect);
@@ -319,12 +319,13 @@ namespace VisualizationRecorder {
 #if DEBUG == false
                                         rect.Fill = gusFring[rect.Name];
                                         ToolTip toolTip = new ToolTip {
-                                            Content = rect.Name"
+                                            Content = rect.Name
                                         };
                                         ToolTipService.SetToolTip(rect, toolTip);
 #endif
                                         _rectangleRegisteTable.Add(rect);
                                     }
+
                                 }
                             }
                         });
