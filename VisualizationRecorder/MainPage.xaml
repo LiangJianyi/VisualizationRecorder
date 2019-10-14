@@ -8,7 +8,7 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Canvas Name="RootCanvas" Loading="RootCanvas_Loading" Loaded="RootCanvas_Loaded">
+    <Canvas Name="RootCanvas" Loaded="RootCanvas_Loaded">
         <Canvas.Resources>
             <x:Double x:Key="CanvasTopForRootGrid">100.0</x:Double>
             <x:String x:Key="DemoAvatar">https://previews.123rf.com/images/urfandadashov/urfandadashov1809/urfandadashov180900496/109085218-demo-vector-icon-isolated-on-transparent-background-demo-logo-concept.jpg</x:String>

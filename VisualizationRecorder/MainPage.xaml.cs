@@ -65,9 +65,7 @@ namespace VisualizationRecorder {
             _file = await openPicker.PickSingleFileAsync();
 
             if (_file != null) {
-                ProgressBoard progressBoard = new ProgressBoard();
-                ProgressBoard.SlideOn(CurrentRectanglesCanvas, progressBoard);
-                ResetRectangle();  // 每次选择文件之后都要重置方块颜色
+                ResetRectangleAndCanvasLayout();  // 每次选择文件之后都要重置方块颜色和面板布局
 
                 Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.Add(_file);
                 string text = await FileIO.ReadTextAsync(_file);
@@ -99,25 +97,7 @@ namespace VisualizationRecorder {
                     else {
                         throw new FilePickFaildException($"错误的文件类型：{_file.FileType}");
                     }
-                    ExtendStackCanvasByFilterOldRecorders(EarlierThanEarliestRectangle(_model.ToStatistTotalByDateTimeArray().ToList(), _earliestRectangle), _earliestRectangle);
-                    ProgressBoard.CancelOn(CurrentRectanglesCanvas, progressBoard);
-                    foreach (Canvas canvas in StackCanvas.Children) {
-                        ProgressBoard.SlideOn(canvas, new ProgressBoard());
-                    }
-                    TioSalamanca[] res = _model.GroupDateTimesByTotal();
-#if DEBUG
-                    for (int level = 0; level < res.Length; level++) {
-                        Debug.WriteLine($"level: {level + 1}");
-                        Debug.WriteLine($"  List res[{level}]:");
-                        foreach (var group in res[level]) {
-                            Debug.WriteLine($"    Total: {group.Key}");
-                            foreach (var item in group) {
-                                Debug.WriteLine($"      {item}");
-                            }
-                        }
-                    }
-#endif
-                    DrawRectangleColor(res, false);
+                    Render(_model, _earliestRectangle);
                 }
                 catch (ArgumentException err) {
                     PopErrorDialogAsync(err.Message);
@@ -298,12 +278,8 @@ namespace VisualizationRecorder {
             UpdateMainPageLayout();
         }
 
-        private void RootCanvas_Loading(FrameworkElement sender, object args) {
-            DateTag(CurrentRectanglesCanvas);
-        }
-
         /// <summary>
-        /// 刷新方块颜色
+        /// 刷新方块颜色和方块面板布局
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -312,7 +288,7 @@ namespace VisualizationRecorder {
              * _rectangleRegisteTable 已在 ResetRectangleColor() 内部重新初始化，
              * 这里无需再次执行 _rectangleRegisteTable = new HashSet<Rectangle>()
              */
-            ResetRectangle();
+            ResetRectangleAndCanvasLayout();
             DrawRectangleColor(_model?.GroupDateTimesByTotal(), true);
             Blink.BlinkedRectangles.Clear();
         }
@@ -327,7 +303,7 @@ namespace VisualizationRecorder {
              * _rectangleRegisteTable 已在 ResetRectangleColor() 内部重新初始化，
              * 这里无需再次执行 _rectangleRegisteTable = new HashSet<Rectangle>()
              */
-            ResetRectangle();
+            ResetRectangleAndCanvasLayout();
             _model = null;
             _file = null;
             _saveMode = SaveMode.NewFile;

@@ -239,6 +239,7 @@ namespace VisualizationRecorder {
                     }
                 }
             }
+            DateTag(rectanglesCanvas);
             return earliestRectangleDate;
         }
 
@@ -333,18 +334,42 @@ namespace VisualizationRecorder {
         }
 
         /// <summary>
-        /// 重置方块的颜色和闪烁状态。
+        /// 重置方块的颜色和闪烁状态，以及所有的 RectanglesCanvas 面板布局。
         /// </summary>
-        private void ResetRectangle() {
-            foreach (var rect in _rectangleRegisteTable) {
-                rect.Fill = new SolidColorBrush(LightGray);
+        private void ResetRectangleAndCanvasLayout() {
+            if (_rectangleRegisteTable.Count > 0) {
+                foreach (var rect in _rectangleRegisteTable) {
+                    rect.Fill = new SolidColorBrush(LightGray);
+                }
+                // 重置方块颜色之后要紧接着清空该表
+                _rectangleRegisteTable.Clear();
+                // 停止所有闪烁状态的方块
+                foreach (var rect in Blink.BlinkedRectangles) {
+                    Blink.StopBlink(rect.Value.rectangle);
+                }
+                // 对 StackCanvas 重新洗牌
+                this.StackCanvas.Children.Clear();
+                this.CurrentRectanglesCanvas = new Canvas() {
+                    Name = "CurrentRectanglesCanvas"
+                };
+                this.CurrentRectanglesCanvas.Loaded += (object sender, RoutedEventArgs e) =>
+                 ProgressBoard.SlideOn(CurrentRectanglesCanvas, new ProgressBoard());
+                this.StackCanvas.Children.Add(this.CurrentRectanglesCanvas);
+                this._earliestRectangle = this.RectanglesLayout(this.CurrentRectanglesCanvas, new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day));
             }
-            // 重置方块颜色之后要紧接着重新初始化该表
-            _rectangleRegisteTable = new HashSet<Rectangle>();
-            // 停止所有闪烁状态的方块
-            foreach (var rect in Blink.BlinkedRectangles) {
-                Blink.StopBlink(rect.Value.rectangle);
+            else {
+                ProgressBoard.SlideOn(CurrentRectanglesCanvas, new ProgressBoard());
             }
+        }
+
+        /// <summary>
+        /// 渲染最终效果
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="earliestRectangle"></param>
+        private void Render(StatistTotalByDateTimeModel model, Rectangle earliestRectangle) {
+            ExtendStackCanvasByFilterOldRecorders(EarlierThanEarliestRectangle(model.ToStatistTotalByDateTimeArray().ToList(), earliestRectangle), earliestRectangle);
+            DrawRectangleColor(model.GroupDateTimesByTotal(), false);
         }
 
         /// <summary>
@@ -422,7 +447,6 @@ namespace VisualizationRecorder {
                     Name = $"OldRectanglesCanvas_{canvasOrdinal}"
                 };
                 Rectangle oldRect = this.RectanglesLayout(oldRectanglesCanvas, DatetimeParser.ParseExpressToDateTime(earliestRectangle.Name, DateMode.DateWithSlash).AddDays(-1));
-                DateTag(oldRectanglesCanvas);
                 oldRectanglesCanvas.Loaded += (object sender, RoutedEventArgs e) => {
                     Canvas canvas = sender as Canvas;
                     foreach (var item in canvas.Children) {
@@ -434,6 +458,12 @@ namespace VisualizationRecorder {
                 this.StackCanvas.Children.Insert(0, oldRectanglesCanvas);
                 List<StatistTotalByDateTime> newOldRecorders = EarlierThanEarliestRectangle(oldRecorders, oldRect);
                 ExtendStackCanvasByFilterOldRecorders(newOldRecorders, oldRect, canvasOrdinal + 1);
+            }
+            // 扩展结束后，给每个 RectanglesCanvas 附加进度条
+            else {
+                foreach (Canvas canvas in this.StackCanvas.Children) {
+                    ProgressBoard.SlideOn(canvas, new ProgressBoard());
+                }
             }
         }
     }
