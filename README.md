@@ -6,19 +6,22 @@
 + 语言：C# 7.3
 + 额外的依赖库：
   + [System.Numerics][1]
-  + [Janyee.Utilty][2]
+  + [BigIntegerExtension][2]
+  + [SuckerInterpreter][3]
   
   [1]: https://docs.microsoft.com/en-us/dotnet/api/system.numerics?view=netframework-4.8
   [2]: https://github.com/LiangJianyi/SundryUtilty/tree/master/.NET%20Standard/BigIntegerExtension
+  [3]: https://github.com/LiangJianyi/SundryUtilty/tree/master/.NET%20Standard/Sucker
   
 # 项目结构
-项目的解决方案文件名称为 VisualizationRecorder.sln，该解决方案下包含四个项目：
+项目的解决方案文件名称为 VisualizationRecorder.sln，该解决方案下包含三个项目：
 + BigIntegerExtension
++ SuckerInterpreter
 + VisualizationRecorder(Universal Windows)
 
-VisualizationRecorder(Universal Windows)是主体项目。BigIntegerExtension 来自 Janyee.Utilty，需要手动添加该项目到解决方案下，VisualizationRecorderTest(Universal Windows) 是主体项目的单元测试项目。
+VisualizationRecorder(Universal Windows)是主体项目。BigIntegerExtension 和 SuckerInterpreter 需要手动添加该项目到解决方案下（VisualizationRecorder.sln），VisualizationRecorderTest(Universal Windows) 是主体项目的单元测试项目。
 
-VisualizationRecorder的大致运行流程如下：
+VisualizationRecorder的大致运行流程如下：![ExampleVedio](https://github.com/LiangJianyi/liangjianyi.github.io/blob/master/vedio/VisualizationRecorderExampleVedio.mp4)
 
 当用户点击文件选择器并选择指定的文本文件后（只能打开 .txt .mast 后缀的文件），提取文本内容，将文本的每一行切割成 string 对象装载为一个 IEnumerable<string>，然后将该文本序列传递给 MainPageViewModel.LinesConvertToStatistTotalByDateTimes 方法，MainPageViewModel.LinesConvertToStatistTotalByDateTimes 方法把每行 string 转换为一个 StatistTotalByDateTime 对象，最后装载成 LinkedList<StatistTotalByDateTime> 传递给 MainPageViewModel.GroupDateTimesByTotal 方法。MainPageViewModel.GroupDateTimesByTotal 方法对链表按 StatistTotalByDateTime.Total 分组，产生一个IGrouping序列，存放在局部变量groupingForTotal中，最后对分组结果进行分级，传递给 DrawRectangleColor 方法根据每个日期所在分组的级别对每个方块进行着色。
   
