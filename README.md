@@ -21,7 +21,7 @@
 
 VisualizationRecorder(Universal Windows)是主体项目。BigIntegerExtension 和 SuckerInterpreter 需要手动添加该项目到解决方案下（VisualizationRecorder.sln），VisualizationRecorderTest(Universal Windows) 是主体项目的单元测试项目。
 
-VisualizationRecorder的大致运行流程如下：![ExampleVedio](https://github.com/LiangJianyi/liangjianyi.github.io/blob/master/vedio/VisualizationRecorderExampleVedio.mp4)
+VisualizationRecorder的大致运行流程如下：[![Watch the video](https://i.imgur.com/vKb2F1B.png)](https://youtu.be/vt5fpE0bzSY)
 
 当用户点击文件选择器并选择指定的文本文件后（只能打开 .txt .mast 后缀的文件），提取文本内容，将文本的每一行切割成 string 对象装载为一个 IEnumerable<string>，然后将该文本序列传递给 MainPageViewModel.LinesConvertToStatistTotalByDateTimes 方法，MainPageViewModel.LinesConvertToStatistTotalByDateTimes 方法把每行 string 转换为一个 StatistTotalByDateTime 对象，最后装载成 LinkedList<StatistTotalByDateTime> 传递给 MainPageViewModel.GroupDateTimesByTotal 方法。MainPageViewModel.GroupDateTimesByTotal 方法对链表按 StatistTotalByDateTime.Total 分组，产生一个IGrouping序列，存放在局部变量groupingForTotal中，最后对分组结果进行分级，传递给 DrawRectangleColor 方法根据每个日期所在分组的级别对每个方块进行着色。
   
