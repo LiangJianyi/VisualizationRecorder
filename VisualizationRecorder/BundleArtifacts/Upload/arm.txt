@@ -1,0 +1,6 @@
+MainPackage=C:\Users\a124p\Documents\GitHub\VisualizationRecorder\VisualizationRecorder\bin\ARM\Release\Upload\VisualizationRecorder_1.0.1.0_ARM.appx
+SymbolPackage=C:\Users\a124p\Documents\GitHub\VisualizationRecorder\VisualizationRecorder\bin\ARM\Release\Upload\VisualizationRecorder_1.0.1.0\VisualizationRecorder_1.0.1.0_ARM.appxsym
+ResourcePack=C:\Users\a124p\Documents\GitHub\VisualizationRecorder\VisualizationRecorder\bin\ARM\Release\Upload\VisualizationRecorder_1.0.1.0_scale-100.appx
+ResourcePack=C:\Users\a124p\Documents\GitHub\VisualizationRecorder\VisualizationRecorder\bin\ARM\Release\Upload\VisualizationRecorder_1.0.1.0_scale-125.appx
+ResourcePack=C:\Users\a124p\Documents\GitHub\VisualizationRecorder\VisualizationRecorder\bin\ARM\Release\Upload\VisualizationRecorder_1.0.1.0_scale-150.appx
+ResourcePack=C:\Users\a124p\Documents\GitHub\VisualizationRecorder\VisualizationRecorder\bin\ARM\Release\Upload\VisualizationRecorder_1.0.1.0_scale-400.appx
