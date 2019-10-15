@@ -23,6 +23,7 @@ BNF 规范参考： http://www.cs.utsa.edu/~wagner/CS3723/grammar/examples2.html
   
 ## txt 文本语法示例一：
 
+``
 May 27 2019 x16
 May 27 2019
 Apr 28 2019 x2610
@@ -59,6 +60,7 @@ Jan 02 2019
 Feb 02 2019
 Mar 02 2019
 Apr 02 2019 x16
+``
 
 上面的文本将转换为如下结构的分组表：
 
@@ -67,6 +69,7 @@ Apr 02 2019 x16
 
 ## txt 文本语法示例二：
 
+``
 May 27 2018 x20
 May 29 2018
 May 31 2018
@@ -83,6 +86,7 @@ Aug 29 2018 x2
 Sep 14 2018 x2
 Sep 27 2018 x2
 Oct 5 2018
+``
 
 StatistTotalByDateTimeModel 通过 GroupDateTimesByTotal 方法转换为如下结构的分组表：
 
