@@ -2,6 +2,7 @@
 txt 文本记录由每一行条目（Entry）组成，每一行 Entry 由四部分组成：月份简写（Month）、月份天数（Day）、年份（Year）和事件频率（Total）组成，每部分由空格分离，次序不能颠倒。
 txt 语法的 BNF 规范定义如下：
 
+```
 &lt;Entry&gt; ::= &lt;Month&gt; &lt;Day&gt; &lt;Year&gt; [&lt;Total&gt;]
 &lt;Month&gt; ::= Jan | Feb | Mar | Apr | May | Jun | Jul | Aug | Sep | Oct | Nov | Dec 
 &lt;Day&gt; ::= &lt;DigitsStartingWithTheNumberOne&gt; | &lt;DigitsStartingWithTheNumberTwo&gt; | &lt;DigitsStartingWithTheNumberThree&gt; | &lt;NonZeroDigit&gt;
@@ -12,14 +13,15 @@ txt 语法的 BNF 规范定义如下：
 &lt;DigitsStartingWithTheNumberThree&gt; ::= 3 [1|0]
 &lt;NonZeroDigit&gt; ::= 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
 &lt;Digit&gt; ::= 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+```
 
 BNF 规范参考： http://www.cs.utsa.edu/~wagner/CS3723/grammar/examples2.html
 
-## 解释原理
+## 解释器原理
 
 将文本的每一行切割成 string 对象装载为一个 IEnumerable&lt;string&gt;，然后将该文本序列传递给 MainPageViewModel.LinesConvertToStatistTotalByDateTimes 方法，MainPageViewModel.LinesConvertToStatistTotalByDateTimes 方法把每行 string 转换为一个 StatistTotalByDateTime 对象，最后装载成 LinkedList&lt;StatistTotalByDateTime&gt; 传递给 MainPageViewModel.GroupDateTimesByTotal 方法。MainPageViewModel.GroupDateTimesByTotal 方法对链表按 StatistTotalByDateTime.Total 分组，产生一个IGrouping序列，存放在局部变量groupingForTotal中，最后对分组结果进行分级，传递给 DrawRectangleColor 方法根据每个日期所在分组的级别对每个方块进行着色。
   
-这个IGrouping序列的长度决定了接下来的分级行为，如果总数大于5，那么数组entries的长度总是5，因为纪录器最多只能分5级，颜色字典也只能产生6个色阶，五种绿色加一种灰色，下面的***分级示例一***描述了 groups&gt;5 时分级表的结构，***分级示例二***描述了 groups&lt;=5 时分级表的结构。
+这个IGrouping序列的长度决定了接下来的分级行为，如果总数大于5，那么数组entries的长度总是5，因为纪录器最多只能分5级，颜色字典也只能产生6个色阶，五种绿色加一种灰色，下面的***txt 文本语法示例一***描述了 groups&gt;5 时分级表的结构，***txt 文本语法示例一***描述了 groups&lt;=5 时分级表的结构。
   
 ## txt 文本语法示例一：
 
