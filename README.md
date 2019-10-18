@@ -38,7 +38,7 @@ MainPage.RectangleLayout()
 
 ## 数据呈现
 
-DrawRectangleColor 方法的着色原理很简单，传递List<IGrouping<BigInteger, StatistTotalByDateTime>>[]的长度给ClassifyColorByLevelScore方法获得色阶字典，类型为IDictionary<int, SolidColorBrush>，然后根据每个条目所在的索引分配指定颜色。
+方块的着色工作交由 DrawRectangleColor 方法执行，用户输入的文本交由解释器生成 List<IGrouping<BigInteger, StatistTotalByDateTime>>[]，该数组的长度给ClassifyColorByLevelScore方法获得色阶字典，类型为IDictionary<int, SolidColorBrush>，然后根据每个条目所在的索引分配指定颜色。
 
 方块有4种状态：
 + 方块对应的日期没有事件发生且用户没有点击它进行修改，用灰色表示：
