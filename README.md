@@ -29,12 +29,12 @@ VisualizationRecorder的大致运行流程如下：[![Watch the video](https://g
 + 方块矩阵生成
 + 数据呈现
 
-## 文法分析
+## 语法分析
 当用户点击文件选择器并选择指定的文本文件后（只能打开 .txt .mast 后缀的文件），提取文本内容，通过 EncodingToStatistTotalByDateTimeModel 方法将其解释为 StatistTotalByDateTimeModel 对象，最后通过 Render 方法将 StatistTotalByDateTimeModel 对象呈现为带有深浅不一的绿色小方块的方块矩阵。 
 .txt 和 .mast 文本分别有各自的语法和解释器，参见：[txt 语法][4]和[SuckerML 标记语言][5]。
 
-无论使用哪种语法，最终都需要把数据可视化为图像
-
+## 方块矩阵生成
+MainPage.RectangleLayout()
 
 ## 数据呈现
 
@@ -71,3 +71,4 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 [2]: https://github.com/LiangJianyi/SundryUtilty/tree/master/.NET%20Standard/BigIntegerExtension
 [3]: https://github.com/LiangJianyi/SundryUtilty/tree/master/.NET%20Standard/Sucker
 [4]: https://github.com/LiangJianyi/VisualizationRecorder/blob/master/txt%20syntax.md
+[5]: https://github.com/LiangJianyi/VisualizationRecorder/blob/master/SuckerML%20syntax.md

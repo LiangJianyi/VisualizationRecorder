@@ -3,16 +3,16 @@ txt 文本记录由每一行条目（Entry）组成，每一行 Entry 由四部�
 txt 语法的 BNF 规范定义如下：
 
 ```
-&lt;Entry&gt; ::= &lt;Month&gt; &lt;Day&gt; &lt;Year&gt; [&lt;Total&gt;]
-&lt;Month&gt; ::= Jan | Feb | Mar | Apr | May | Jun | Jul | Aug | Sep | Oct | Nov | Dec 
-&lt;Day&gt; ::= &lt;DigitsStartingWithTheNumberOne&gt; | &lt;DigitsStartingWithTheNumberTwo&gt; | &lt;DigitsStartingWithTheNumberThree&gt; | &lt;NonZeroDigit&gt;
-&lt;Year&gt; ::= &lt;NonZeroDigit&gt; {&lt;Digit&gt;}
-&lt;Total&gt; ::= x &lt;NonZeroDigit&gt; {&lt;Digit&gt;}
-&lt;DigitsStartingWithTheNumberOne&gt; ::= 1 [&lt;Digit&gt;]
-&lt;DigitsStartingWithTheNumberTwo&gt; ::= 2 [&lt;Digit&gt;]
-&lt;DigitsStartingWithTheNumberThree&gt; ::= 3 [1|0]
-&lt;NonZeroDigit&gt; ::= 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
-&lt;Digit&gt; ::= 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+<Entry> ::= <Month> <Day> <Year> [<Total>]
+<Month> ::= Jan | Feb | Mar | Apr | May | Jun | Jul | Aug | Sep | Oct | Nov | Dec 
+<Day> ::= <DigitsStartingWithTheNumberOne> | <DigitsStartingWithTheNumberTwo> | <DigitsStartingWithTheNumberThree> | <NonZeroDigit>
+<Year> ::= <NonZeroDigit> {<Digit>}
+<Total> ::= x <NonZeroDigit> {<Digit>}
+<DigitsStartingWithTheNumberOne> ::= 1 [<Digit>]
+<DigitsStartingWithTheNumberTwo> ::= 2 [<Digit>]
+<DigitsStartingWithTheNumberThree> ::= 3 [1|0]
+<NonZeroDigit> ::= 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+<Digit> ::= 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
 ```
 
 BNF 规范参考： http://www.cs.utsa.edu/~wagner/CS3723/grammar/examples2.html
