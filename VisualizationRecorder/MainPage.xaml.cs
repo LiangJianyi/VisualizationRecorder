@@ -11,7 +11,6 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Shapes;
 using VisualizationRecorder.CommonTool;
 using Windows.UI.Xaml.Navigation;
-using Janyee.Utilty;
 
 namespace VisualizationRecorder {
     using Debug = System.Diagnostics.Debug;
@@ -68,35 +67,8 @@ namespace VisualizationRecorder {
                 ResetRectangleAndCanvasLayout();  // 每次选择文件之后都要重置方块颜色和面板布局
 
                 Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.Add(_file);
-                string text = await FileIO.ReadTextAsync(_file);
                 try {
-                    if (_file.FileType == ".txt") {
-                        IEnumerable<string> lines = DatetimeParser.SplitByLine(text);
-                        _model = new StatistTotalByDateTimeModel(lines);
-                    }
-                    else if (_file.FileType == ".mast") {
-                        JymlAST.Cons ast = JymlParser.Parser.GenerateAst(text);
-                        Interpreter.SuckerMLInterpreter.Sucker sucker = Interpreter.SuckerMLInterpreter.Eval(ast);
-                        List<StatistTotalByDateTime> statistTotalByDateTimes = new List<StatistTotalByDateTime>();
-                        foreach (var year in sucker.Years) {
-                            foreach (var month in year.Value.Months) {
-                                foreach (var day in month.Value.Days) {
-                                    statistTotalByDateTimes.Add(new StatistTotalByDateTime() {
-                                        DateTime = new DateTime(
-                                            year: year.Value.Year.BigIntegerToInt32(),
-                                            month: month.Value.Month,
-                                            day: day.Value.Day
-                                        ),
-                                        Total = day.Value.Total
-                                    });
-                                }
-                            }
-                        }
-                        _model = new StatistTotalByDateTimeModel(statistTotalByDateTimes);
-                    }
-                    else {
-                        throw new FilePickFaildException($"错误的文件类型：{_file.FileType}");
-                    }
+                    _model = await EncodingToStatistTotalByDateTimeModelAsync(_file);
                     Render(_model, _earliestRectangle);
                 }
                 catch (ArgumentException err) {

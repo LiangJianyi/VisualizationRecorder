@@ -5,12 +5,11 @@ using System.Numerics;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.Pickers;
-using Windows.Storage.Streams;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Shapes;
+using Janyee.Utilty;
 
 namespace VisualizationRecorder {
     using Debug = System.Diagnostics.Debug;
@@ -463,6 +462,37 @@ namespace VisualizationRecorder {
                 foreach (Canvas canvas in this.StackCanvas.Children) {
                     ProgressBoard.SlideOn(canvas, new ProgressBoard());
                 }
+            }
+        }
+
+        private static async Task<StatistTotalByDateTimeModel> EncodingToStatistTotalByDateTimeModelAsync(StorageFile file) {
+            string text = await FileIO.ReadTextAsync(file);
+            if (file.FileType == ".txt") {
+                IEnumerable<string> lines = DatetimeParser.SplitByLine(text);
+                return new StatistTotalByDateTimeModel(lines);
+            }
+            else if (file.FileType == ".mast") {
+                JymlAST.Cons ast = JymlParser.Parser.GenerateAst(text);
+                Interpreter.SuckerMLInterpreter.Sucker sucker = Interpreter.SuckerMLInterpreter.Eval(ast);
+                List<StatistTotalByDateTime> statistTotalByDateTimes = new List<StatistTotalByDateTime>();
+                foreach (var year in sucker.Years) {
+                    foreach (var month in year.Value.Months) {
+                        foreach (var day in month.Value.Days) {
+                            statistTotalByDateTimes.Add(new StatistTotalByDateTime() {
+                                DateTime = new DateTime(
+                                    year: year.Value.Year.BigIntegerToInt32(),
+                                    month: month.Value.Month,
+                                    day: day.Value.Day
+                                ),
+                                Total = day.Value.Total
+                            });
+                        }
+                    }
+                }
+                return new StatistTotalByDateTimeModel(statistTotalByDateTimes);
+            }
+            else {
+                throw new FilePickFaildException($"错误的文件类型：{_file.FileType}");
             }
         }
     }
