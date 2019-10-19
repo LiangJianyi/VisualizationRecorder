@@ -20,7 +20,7 @@ VisualizationRecorder(Universal Windows)是主体项目。BigIntegerExtension �
 
 VisualizationRecorder的大致运行流程如下：[![Watch the video](https://github.com/LiangJianyi/liangjianyi.github.io/blob/master/vedio/VisualizationRecorderSlashVedioFrame.png)](https://youtu.be/VsvTEOE04bs)
 
-(点击上面的图片播放教学视频)
+(点击上面的图片播放YouTube教学视频)
 
 # 工作原理
 
@@ -34,7 +34,19 @@ VisualizationRecorder的大致运行流程如下：[![Watch the video](https://g
 .txt 和 .mast 文本分别有各自的语法和解释器，参见：[txt 语法][4]和[SuckerML 标记语言][5]。
 
 ## 方块矩阵生成
-MainPage.RectangleLayout()
+![Rectangle Canvas](https://github.com/LiangJianyi/liangjianyi.github.io/blob/master/image/RectanglesCanvas.png)
+上图的灰色边框范围表示一个方块面板，它位于 MainPage.xaml 页面，名为 CurrentRectanglesCanvas，包含在一个 Panel 容器中，它的页面初始代码为：
+```
+<StackPanel x:Name="StackCanvas">
+<Canvas x:Name="CurrentRectanglesCanvas" Width="300" Height="300"></Canvas>
+</StackPanel>
+```
+里面的小方块由 MainPage.RectangleLayout() 方法生成并填充到方块面板中。填充小方块之前，方块面板的大小会重新调整，它的长和宽由下面两行代码决定：
+```
+rectanglesCanvas.Width = totalWeek * COLUMN_DISTANCE + LEFT_SPACE + RIGHT_SPACE + totalWeek * RECT_WIDHT + RECT_WIDHT;
+rectanglesCanvas.Height = ROW_DISTANCE * 6 + BOTTOM_SPACE + MONTH_TITLE_SPACE + 7 * RECT_HEIGHT;
+```
+
 
 ## 数据呈现
 
