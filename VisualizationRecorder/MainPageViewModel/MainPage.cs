@@ -195,7 +195,6 @@ namespace VisualizationRecorder {
             const int LEFT_SPACE = 80;
             const int TOP_SPACE = 37;
             const int RIGHT_SPACE = LEFT_SPACE;
-            int rectCount = pastDay.Days;
             int totalWeek = pastDay.Days / 7;
             rectanglesCanvas.Width = totalWeek * COLUMN_DISTANCE + LEFT_SPACE + RIGHT_SPACE + totalWeek * RECT_WIDHT + RECT_WIDHT;
             rectanglesCanvas.Height = ROW_DISTANCE * 6 + BOTTOM_SPACE + MONTH_TITLE_SPACE + 7 * RECT_HEIGHT;
