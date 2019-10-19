@@ -3,7 +3,7 @@
 
 可视化事件记录器已登录 ![Microsoft Store][https://www.microsoft.com/zh-cn/p/%e5%8f%af%e8%a7%86%e5%8c%96%e4%ba%8b%e4%bb%b6%e8%ae%b0%e5%bd%95%e5%99%a8/9mxnff1j4q0k?activetab=pivot:overviewtab]。
 
-# 开发环境  ![GitHub](https://img.shields.io/badge/csharp-7.3-blue.svg)
+# 开发环境  [GitHub](https://img.shields.io/badge/csharp-7.3-blue.svg)
 + IDE： Visual Studio 2019
 + 语言：C# 7.3
 + 额外的依赖库：
