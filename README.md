@@ -48,7 +48,8 @@ VisualizationRecorder的大致运行流程如下：[![Watch the video](https://g
 rectanglesCanvas.Width = totalWeek * COLUMN_DISTANCE + LEFT_SPACE + RIGHT_SPACE + totalWeek * RECT_WIDHT + RECT_WIDHT;
 rectanglesCanvas.Height = ROW_DISTANCE * 6 + BOTTOM_SPACE + MONTH_TITLE_SPACE + 7 * RECT_HEIGHT;
 ```
-
+下图表示了上面两行代码各个变量的直观含义：
+![Rectangle Canvas Blueprint](https://github.com/LiangJianyi/liangjianyi.github.io/blob/master/image/RectanglesCanvasBlueprint.png)
 
 ## 数据呈现
 
