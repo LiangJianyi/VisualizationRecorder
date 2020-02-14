@@ -1,4 +1,11 @@
 
+# VisualizationRecorder project ignore files
 .vs/*
 VisualizationRecorder/obj/*
 VisualizationRecorder/bin/*
+packages/*
+x64/*
+
+# TxtRecordGenerator project ignore files
+TxtRecordGenerator/Generated\ Files/*
+TxtRecordGenerator/x64/

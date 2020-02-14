@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.852
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisualizationRecorder", "VisualizationRecorder\VisualizationRecorder.csproj", "{28FB5D10-52A7-4F64-81FF-B70A788754F9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BigIntegerExtension", "..\SundryUtilty\.NET Standard\BigIntegerExtension\BigIntegerExtension.csproj", "{46CA3186-2216-4A9E-B542-EC6356E0DF8A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuckerInterpreter", "..\SundryUtilty\.NET Standard\Sucker\SuckerInterpreter\SuckerInterpreter.csproj", "{2DD5F2C5-E0E9-4001-830B-1F8836B868C7}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TxtRecordGenerator", "TxtRecordGenerator\TxtRecordGenerator.vcxproj", "{A187AA84-AD9F-46F3-8E61-82C47B7568E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -91,6 +93,28 @@ Global
 		{2DD5F2C5-E0E9-4001-830B-1F8836B868C7}.Release|x64.Build.0 = Release|Any CPU
 		{2DD5F2C5-E0E9-4001-830B-1F8836B868C7}.Release|x86.ActiveCfg = Release|Any CPU
 		{2DD5F2C5-E0E9-4001-830B-1F8836B868C7}.Release|x86.Build.0 = Release|Any CPU
+		{A187AA84-AD9F-46F3-8E61-82C47B7568E5}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{A187AA84-AD9F-46F3-8E61-82C47B7568E5}.Debug|ARM.ActiveCfg = Debug|ARM
+		{A187AA84-AD9F-46F3-8E61-82C47B7568E5}.Debug|ARM.Build.0 = Debug|ARM
+		{A187AA84-AD9F-46F3-8E61-82C47B7568E5}.Debug|ARM.Deploy.0 = Debug|ARM
+		{A187AA84-AD9F-46F3-8E61-82C47B7568E5}.Debug|ARM64.ActiveCfg = Debug|Win32
+		{A187AA84-AD9F-46F3-8E61-82C47B7568E5}.Debug|x64.ActiveCfg = Debug|x64
+		{A187AA84-AD9F-46F3-8E61-82C47B7568E5}.Debug|x64.Build.0 = Debug|x64
+		{A187AA84-AD9F-46F3-8E61-82C47B7568E5}.Debug|x64.Deploy.0 = Debug|x64
+		{A187AA84-AD9F-46F3-8E61-82C47B7568E5}.Debug|x86.ActiveCfg = Debug|Win32
+		{A187AA84-AD9F-46F3-8E61-82C47B7568E5}.Debug|x86.Build.0 = Debug|Win32
+		{A187AA84-AD9F-46F3-8E61-82C47B7568E5}.Debug|x86.Deploy.0 = Debug|Win32
+		{A187AA84-AD9F-46F3-8E61-82C47B7568E5}.Release|Any CPU.ActiveCfg = Release|Win32
+		{A187AA84-AD9F-46F3-8E61-82C47B7568E5}.Release|ARM.ActiveCfg = Release|ARM
+		{A187AA84-AD9F-46F3-8E61-82C47B7568E5}.Release|ARM.Build.0 = Release|ARM
+		{A187AA84-AD9F-46F3-8E61-82C47B7568E5}.Release|ARM.Deploy.0 = Release|ARM
+		{A187AA84-AD9F-46F3-8E61-82C47B7568E5}.Release|ARM64.ActiveCfg = Release|Win32
+		{A187AA84-AD9F-46F3-8E61-82C47B7568E5}.Release|x64.ActiveCfg = Release|x64
+		{A187AA84-AD9F-46F3-8E61-82C47B7568E5}.Release|x64.Build.0 = Release|x64
+		{A187AA84-AD9F-46F3-8E61-82C47B7568E5}.Release|x64.Deploy.0 = Release|x64
+		{A187AA84-AD9F-46F3-8E61-82C47B7568E5}.Release|x86.ActiveCfg = Release|Win32
+		{A187AA84-AD9F-46F3-8E61-82C47B7568E5}.Release|x86.Build.0 = Release|Win32
+		{A187AA84-AD9F-46F3-8E61-82C47B7568E5}.Release|x86.Deploy.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
