@@ -105,6 +105,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\SundryUtilty\Cpp code files\JanyeeDateTime\DateTime.h" />
+    <ClInclude Include="..\..\SundryUtilty\Cpp code files\JanyeeDateTime\DateTimeException.h" />
+    <ClInclude Include="..\..\SundryUtilty\Cpp code files\JanyeeUtilty\Utilty.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="App.h">
       <DependentUpon>App.xaml</DependentUpon>
@@ -136,6 +139,9 @@
     <Image Include="Assets\Wide310x150Logo.scale-200.png" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\SundryUtilty\Cpp code files\JanyeeDateTime\DateTime.cpp" />
+    <ClCompile Include="..\..\SundryUtilty\Cpp code files\JanyeeDateTime\DateTimeException.cpp" />
+    <ClCompile Include="..\..\SundryUtilty\Cpp code files\JanyeeUtilty\Utilty.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

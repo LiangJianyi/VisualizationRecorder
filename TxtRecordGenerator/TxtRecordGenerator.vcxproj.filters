@@ -15,9 +15,15 @@
     <ClCompile Include="App.cpp" />
     <ClCompile Include="MainPage.cpp" />
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
+    <ClCompile Include="..\..\SundryUtilty\Cpp code files\JanyeeDateTime\DateTime.cpp" />
+    <ClCompile Include="..\..\SundryUtilty\Cpp code files\JanyeeDateTime\DateTimeException.cpp" />
+    <ClCompile Include="..\..\SundryUtilty\Cpp code files\JanyeeUtilty\Utilty.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
+    <ClInclude Include="..\..\SundryUtilty\Cpp code files\JanyeeDateTime\DateTime.h" />
+    <ClInclude Include="..\..\SundryUtilty\Cpp code files\JanyeeDateTime\DateTimeException.h" />
+    <ClInclude Include="..\..\SundryUtilty\Cpp code files\JanyeeUtilty\Utilty.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">
