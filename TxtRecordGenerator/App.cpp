@@ -10,6 +10,7 @@ using namespace Windows::Foundation;
 using namespace Windows::UI::Xaml;
 using namespace Windows::UI::Xaml::Controls;
 using namespace Windows::UI::Xaml::Navigation;
+using namespace Windows::UI::ViewManagement;
 using namespace TxtRecordGenerator;
 using namespace TxtRecordGenerator::implementation;
 
@@ -41,6 +42,8 @@ App::App()
 /// <param name="e">Details about the launch request and process.</param>
 void App::OnLaunched(LaunchActivatedEventArgs const& e)
 {
+    ApplicationView::PreferredLaunchViewSize(Size(800, 600));
+    ApplicationView::PreferredLaunchWindowingMode(ApplicationViewWindowingMode::PreferredLaunchViewSize);
     Frame rootFrame{ nullptr };
     auto content = Window::Current().Content();
     if (content)

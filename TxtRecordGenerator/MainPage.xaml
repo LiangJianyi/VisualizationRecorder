@@ -12,6 +12,7 @@
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition/>
+            <RowDefinition Height="200"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -55,5 +56,12 @@
                    Grid.Column="1"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"/>
+        <Button x:Name="GeneratorButton" 
+                Grid.ColumnSpan="2" 
+                Grid.Row="2" 
+                Content="生成事件记录文本" 
+                Click="GeneratorButton_Click" 
+                HorizontalAlignment="Right"
+                Margin="0,50,100,0"/>
     </Grid>
 </Page>
