@@ -2,7 +2,7 @@
 #include "MainPage.h"
 #include "MainPage.g.cpp"
 #include "../../SundryUtilty/Cpp code files/JanyeeDateTime/DateTime.h"
-#include "../../SundryUtilty/Cpp code files/JanyeeUtilty/Utilty.h"
+#include "MainPageHelper.h"
 
 using namespace winrt;
 using namespace Windows::UI::Xaml;
@@ -35,13 +35,8 @@ void winrt::TxtRecordGenerator::implementation::MainPage::GeneratorButton_Click(
 		OutputDebugStringA(("endDateTime: " + endDateTime.ToString() + "\n").c_str());
 		const uint32_t ENTRIES_COUNT = 10;
 		for (uint32_t i = 0; i < ENTRIES_COUNT; i++) {
-			const auto& dateTuple = Janyee::Utilty::RandomDate(
-				std::make_tuple(beginDateTime.GetYear(), endDateTime.GetYear()),
-				std::make_tuple(beginDateTime.GetMonth(), endDateTime.GetMonth()),
-				std::make_tuple(beginDateTime.GetDayOfMonth(), endDateTime.GetDayOfMonth())
-			);
-			const Janyee::DateTime& date = Janyee::DateTime(std::get<0>(dateTuple), std::get<1>(dateTuple), std::get<2>(dateTuple));
-			OutputDebugStringA((date.ToString() + "\n").c_str());
+			const auto& entry = MainPageHelper::RandomDateTime(beginDateTime, endDateTime);
+			OutputDebugStringA(entry.ToString().c_str());
 		}
 	}
 	else {
