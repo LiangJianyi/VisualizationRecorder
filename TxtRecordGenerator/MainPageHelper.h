@@ -1,46 +1,58 @@
 ﻿#pragma once
+#include <sstream>
 #include "../../SundryUtilty/Cpp code files/JanyeeDateTime/DateTime.h"
 
 struct MainPageHelper
 {
 	static Janyee::DateTime RandomDateTime(Janyee::DateTime const& lowerLimitDate, Janyee::DateTime const& upperLimitDate) {
-		auto const& lowerLimitYear = lowerLimitDate.GetYear();
-		auto const& upperLimitYear = upperLimitDate.GetYear();
-		auto const& lowerLimitMonth = lowerLimitDate.GetMonth();
-		auto const& upperLimitMonth = upperLimitDate.GetMonth();
-		auto const& lowerLimitDay = lowerLimitDate.GetDayOfMonth();
-		auto const& upperLimitDay = upperLimitDate.GetDayOfMonth();
+		auto lowerLimitYear = lowerLimitDate.GetYear();
+		auto upperLimitYear = upperLimitDate.GetYear();
+		auto lowerLimitMonth = lowerLimitDate.GetMonth();
+		auto upperLimitMonth = upperLimitDate.GetMonth();
+		auto lowerLimitDay = lowerLimitDate.GetDayOfMonth();
+		auto upperLimitDay = upperLimitDate.GetDayOfMonth();
 		std::mt19937 gen { std::random_device{}() };
 		unsigned long long year = std::uniform_int_distribution<unsigned long long>(lowerLimitYear, upperLimitYear)(gen);
 		unsigned short month;
 		unsigned short day;
-		if (year == lowerLimitYear) {
-
-		}
-		else if (year == upperLimitYear) {
-
-		}
-		else {
-			month = std::uniform_int_distribution<decltype(month)>(1, 12)(gen);
-			if (month == lowerLimitMonth) {
-				day = std::uniform_int_distribution<decltype(day)>(lowerLimitDay, CalculateUpperDay(year, month))(gen);
+		try {
+			if (year == lowerLimitYear) {
+				month = std::uniform_int_distribution<decltype(month)>(lowerLimitMonth, 12)(gen);
+				if (month == lowerLimitMonth) {
+					day = std::uniform_int_distribution<decltype(day)>(lowerLimitDay, CalculateUpperDay(year, month))(gen);
+				}
+				else {
+					day = std::uniform_int_distribution<decltype(day)>(1, CalculateUpperDay(year, month))(gen);
+				}
 			}
-			else if (month == upperLimitMonth) {
-				day = std::uniform_int_distribution<decltype(day)>(1, upperLimitDay)(gen);
+			else if (year == upperLimitYear) {
+				month = std::uniform_int_distribution<decltype(month)>(1, upperLimitMonth)(gen);
+				if (month == upperLimitMonth) {
+					day = std::uniform_int_distribution<decltype(day)>(1, upperLimitDay)(gen);
+				}
+				else {
+					day = std::uniform_int_distribution<decltype(day)>(1, CalculateUpperDay(year, month))(gen);
+				}
 			}
 			else {
+				month = std::uniform_int_distribution<decltype(month)>(1, 12)(gen);
 				day = std::uniform_int_distribution<decltype(day)>(1, CalculateUpperDay(year, month))(gen);
 			}
+			return Janyee::DateTime(year, month, day);
 		}
-
-
-		//auto month = std::uniform_int_distribution<unsigned short>(std::get<DOWN_LIMIT>(months), std::get<UPPER_LIMIT>(months))(gen);
-		//auto day = std::uniform_int_distribution<unsigned short>(std::get<DOWN_LIMIT>(days), std::get<UPPER_LIMIT>(days))(gen);
-		//auto hour = std::uniform_int_distribution<unsigned short>(0, 23)(gen);
-		//auto min = std::uniform_int_distribution<unsigned short>(0, 59)(gen);
-		//auto sec = std::uniform_int_distribution<unsigned short>(0, 59)(gen);
-		//return std::make_tuple(year, month, day, hour, min, sec);
-		return Janyee::DateTime(year, month, day);
+		catch (const std::out_of_range& e) {
+			std::stringstream s;
+			s << "CalculateUpperDay raise out of range exception. Year value is "
+				<< std::to_string(year)
+				<< ". Month value is "
+				<< std::to_string(month)
+				<< ". Day value is "
+				<< std::to_string(day)
+				<< "\n";
+			s << e.what() << "\n";
+			OutputDebugStringA(s.str().c_str());
+			throw std::out_of_range(s.str());
+		}
 	}
 
 private:
