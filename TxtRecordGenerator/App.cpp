@@ -42,7 +42,7 @@ App::App()
 /// <param name="e">Details about the launch request and process.</param>
 void App::OnLaunched(LaunchActivatedEventArgs const& e)
 {
-    ApplicationView::PreferredLaunchViewSize(Size(800, 600));
+    ApplicationView::PreferredLaunchViewSize(Size(700, 500));
     ApplicationView::PreferredLaunchWindowingMode(ApplicationViewWindowingMode::PreferredLaunchViewSize);
     Frame rootFrame{ nullptr };
     auto content = Window::Current().Content();

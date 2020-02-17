@@ -12,6 +12,11 @@ namespace winrt::TxtRecordGenerator::implementation
 {
 	MainPage::MainPage() {
 		InitializeComponent();
+		UpdateLayout();
+	}
+
+	void MainPage::UpdateLayout() {
+		EntriesTotal().Width(GeneratorButton().ActualWidth());
 	}
 }
 
@@ -33,11 +38,12 @@ void winrt::TxtRecordGenerator::implementation::MainPage::GeneratorButton_Click(
 		const Janyee::DateTime& endDateTime = Janyee::DateTime(et);
 		OutputDebugStringA(("beginDateTime: " + beginDateTime.ToString() + "\n").c_str());
 		OutputDebugStringA(("endDateTime: " + endDateTime.ToString() + "\n").c_str());
-		const uint32_t ENTRIES_COUNT = 100;
-		for (uint32_t i = 0; i < ENTRIES_COUNT; i++) {
+		for (uint32_t i = 0; i < EntriesTotal().Value(); i++) {
 			try {
 				const auto& entry = MainPageHelper::RandomDateTime(beginDateTime, endDateTime);
-				OutputDebugStringA(entry.ToString().c_str());
+				std::stringstream s;
+				s << entry.ToShortTime() << " x" << std::to_string(MainPageHelper::RandomEventFrequency(EventFrequencyDownLimit().Value(), EventFrequencyUpperLimit().Value())) << "\n";
+				OutputDebugStringA(s.str().c_str());
 				OutputDebugStringA("\n");
 			}
 			catch (const Janyee::DateTimeException & e) {

@@ -12,9 +12,9 @@ struct MainPageHelper
 		auto lowerLimitDay = lowerLimitDate.GetDayOfMonth();
 		auto upperLimitDay = upperLimitDate.GetDayOfMonth();
 		std::mt19937 gen { std::random_device{}() };
-		unsigned long long year = std::uniform_int_distribution<unsigned long long>(lowerLimitYear, upperLimitYear)(gen);
-		unsigned short month;
-		unsigned short day;
+		decltype(upperLimitYear) year = std::uniform_int_distribution<decltype(upperLimitYear)>(lowerLimitYear, upperLimitYear)(gen);
+		decltype(upperLimitMonth) month = 0;
+		decltype(upperLimitDay) day = 0;
 		try {
 			if (year == lowerLimitYear) {
 				month = std::uniform_int_distribution<decltype(month)>(lowerLimitMonth, 12)(gen);
@@ -55,9 +55,15 @@ struct MainPageHelper
 		}
 	}
 
+	static double RandomEventFrequency(double downLimit, double upperLimit) {
+		unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+		std::mt19937 gen { seed };
+		return std::uniform_int_distribution<decltype(downLimit)>(downLimit, upperLimit)(gen);
+	}
+
 private:
 	// 返回指定月份的天数上限
-	static unsigned short CalculateUpperDay(unsigned long long const& year, unsigned short const& month) {
+	static int CalculateUpperDay(int& year, int& month) {
 		std::map<int, int> monthPair;
 		monthPair[1] = 31;
 		monthPair[2] = Janyee::DateTime::IsLeapYear(year) ? 29 : 28;

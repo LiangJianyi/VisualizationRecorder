@@ -28,14 +28,14 @@
                             VerticalAlignment="Center"/>
         <CalendarDatePicker x:Name="EndDatePicker" 
                             PlaceholderText="Pick a date" 
-                            Header="事件结束日期日期：" 
+                            Header="事件结束日期：" 
                             Foreground="{ThemeResource SystemAccentColorLight1}" 
                             Grid.Row="0" 
                             Grid.Column="1" 
                             HorizontalAlignment="Center" 
                             VerticalAlignment="Center" />
-        <controls:NumberBox x:Name="事件频率下限"
-                   Header="Enter an integer:" 
+        <controls:NumberBox x:Name="EventFrequencyDownLimit"
+                   Header="事件频率下限:" 
                    Value="1" 
                    Minimum="1"
                    SpinButtonPlacementMode="Compact" 
@@ -45,8 +45,8 @@
                    Grid.Column="0"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"/>
-        <controls:NumberBox x:Name="事件频率上限"
-                   Header="Enter an integer:" 
+        <controls:NumberBox x:Name="EventFrequencyUpperLimit"
+                   Header="事件频率上限:" 
                    Value="1" 
                    Minimum="1"
                    SpinButtonPlacementMode="Compact" 
@@ -63,5 +63,16 @@
                 Click="GeneratorButton_Click" 
                 HorizontalAlignment="Right"
                 Margin="0,50,100,0"/>
+        <controls:NumberBox x:Name="EntriesTotal"
+                   Header="生成记录数目:" 
+                   Value="1" 
+                   Minimum="1"
+                   SpinButtonPlacementMode="Compact" 
+                   SmallChange="1"
+                   LargeChange="100"
+                   Grid.Row="3"
+                   Grid.ColumnSpan="2" 
+                   HorizontalAlignment="Right"
+                   Margin="0,0,100,0"/>
     </Grid>
 </Page>

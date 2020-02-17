@@ -7,6 +7,7 @@ namespace winrt::TxtRecordGenerator::implementation
     struct MainPage : MainPageT<MainPage>
     {
         MainPage();
+		void UpdateLayout();
 		void GeneratorButton_Click(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::UI::Xaml::RoutedEventArgs const& e);
 		void BeginDatePicker_Opened(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::Foundation::IInspectable const& e);
 		void BeginDatePicker_DateChanged(winrt::Windows::UI::Xaml::Controls::CalendarDatePicker const& sender, winrt::Windows::UI::Xaml::Controls::CalendarDatePickerDateChangedEventArgs const& args);
