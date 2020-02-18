@@ -6,6 +6,7 @@
 
 using namespace winrt;
 using namespace Windows::UI::Xaml;
+using namespace Windows::UI::Xaml::Controls;
 using namespace Windows::Foundation;
 
 namespace winrt::TxtRecordGenerator::implementation
@@ -54,10 +55,15 @@ void winrt::TxtRecordGenerator::implementation::MainPage::GeneratorButton_Click(
 			}
 			catch (const Janyee::DateTimeException & e) {
 				OutputDebugStringA(e.what());
+				throw e;
 			}
 		}
 	}
 	else {
-		OutputDebugStringA("You not pick a date.\n");
+		ContentDialog c;
+		c.Title(box_value(L"Error"));
+		c.Content(box_value(L"You not pick a date."));
+		c.CloseButtonText(L"Close");
+		c.ShowAsync();
 	}
 }
