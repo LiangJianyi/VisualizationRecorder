@@ -16,7 +16,9 @@ namespace winrt::TxtRecordGenerator::implementation
 	}
 
 	void MainPage::UpdateLayout() {
-		EntriesTotal().Width(GeneratorButton().ActualWidth());
+		OutputDebugStringA((std::string("GeneratorButton().ActualWidth(): ") + std::to_string(GeneratorButton().ActualWidth()) + "\n").c_str());
+		OutputDebugStringA((std::string("EntriesTotal().ActualWidth(): ") + std::to_string(EntriesTotal().ActualWidth()) + "\n").c_str());
+		//EntriesTotal().Width(GeneratorButton().ActualWidth());
 	}
 }
 
@@ -42,9 +44,13 @@ void winrt::TxtRecordGenerator::implementation::MainPage::GeneratorButton_Click(
 			try {
 				const auto& entry = MainPageHelper::RandomDateTime(beginDateTime, endDateTime);
 				std::stringstream s;
-				s << entry.ToShortTime() << " x" << std::to_string(MainPageHelper::RandomEventFrequency(EventFrequencyDownLimit().Value(), EventFrequencyUpperLimit().Value())) << "\n";
+				s << entry.ToShortDate()
+					<< " x"
+					<< std::to_string(
+						static_cast<int>(MainPageHelper::RandomEventFrequency(EventFrequencyDownLimit().Value(), EventFrequencyUpperLimit().Value()))
+					)
+					<< "\n";
 				OutputDebugStringA(s.str().c_str());
-				OutputDebugStringA("\n");
 			}
 			catch (const Janyee::DateTimeException & e) {
 				OutputDebugStringA(e.what());

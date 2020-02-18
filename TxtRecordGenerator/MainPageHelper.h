@@ -11,36 +11,35 @@ struct MainPageHelper
 		auto upperLimitMonth = upperLimitDate.GetMonth();
 		auto lowerLimitDay = lowerLimitDate.GetDayOfMonth();
 		auto upperLimitDay = upperLimitDate.GetDayOfMonth();
-		std::mt19937 gen { std::random_device{}() };
-		decltype(upperLimitYear) year = std::uniform_int_distribution<decltype(upperLimitYear)>(lowerLimitYear, upperLimitYear)(gen);
+		decltype(upperLimitYear) year = RandomNumber(lowerLimitYear, upperLimitYear);
 		decltype(upperLimitMonth) month = 0;
 		decltype(upperLimitDay) day = 0;
 		try {
 			if (year == lowerLimitYear) {
-				month = std::uniform_int_distribution<decltype(month)>(lowerLimitMonth, 12)(gen);
+				month = RandomNumber(lowerLimitMonth, 12);
 				if (month == lowerLimitMonth) {
-					day = std::uniform_int_distribution<decltype(day)>(lowerLimitDay, CalculateUpperDay(year, month))(gen);
+					day = RandomNumber(lowerLimitDay, CalculateUpperDay(year, month));
 				}
 				else {
-					day = std::uniform_int_distribution<decltype(day)>(1, CalculateUpperDay(year, month))(gen);
+					day = RandomNumber(1, CalculateUpperDay(year, month));
 				}
 			}
 			else if (year == upperLimitYear) {
-				month = std::uniform_int_distribution<decltype(month)>(1, upperLimitMonth)(gen);
+				month = RandomNumber(1, upperLimitMonth);
 				if (month == upperLimitMonth) {
-					day = std::uniform_int_distribution<decltype(day)>(1, upperLimitDay)(gen);
+					day = RandomNumber(1, upperLimitDay);
 				}
 				else {
-					day = std::uniform_int_distribution<decltype(day)>(1, CalculateUpperDay(year, month))(gen);
+					day = RandomNumber(1, CalculateUpperDay(year, month));
 				}
 			}
 			else {
-				month = std::uniform_int_distribution<decltype(month)>(1, 12)(gen);
-				day = std::uniform_int_distribution<decltype(day)>(1, CalculateUpperDay(year, month))(gen);
+				month = RandomNumber(1, 12);
+				day = RandomNumber(1, CalculateUpperDay(year, month));
 			}
 			return Janyee::DateTime(year, month, day);
 		}
-		catch (const std::out_of_range& e) {
+		catch (const std::out_of_range & e) {
 			std::stringstream s;
 			s << "CalculateUpperDay raise out of range exception. Year value is "
 				<< std::to_string(year)
@@ -56,9 +55,38 @@ struct MainPageHelper
 	}
 
 	static double RandomEventFrequency(double downLimit, double upperLimit) {
-		unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-		std::mt19937 gen { seed };
-		return std::uniform_int_distribution<decltype(downLimit)>(downLimit, upperLimit)(gen);
+		return RandomNumber(downLimit, upperLimit);
+	}
+
+	static auto const& RandomData() {
+		thread_local static std::array<typename std::mt19937::result_type, std::mt19937::state_size> data;
+		thread_local static std::random_device rd;
+
+		std::generate(std::begin(data), std::end(data), std::ref(rd));
+
+		return data;
+	}
+
+	static std::mt19937& RandomGenerator() {
+		auto const& data = RandomData();
+
+		thread_local static std::seed_seq seeds(std::begin(data), std::end(data));
+		thread_local static std::mt19937 gen { seeds };
+
+		return gen;
+	}
+
+	template<typename T> static T RandomNumber(T from, T to) {
+		using Distribution = typename std::conditional
+			<
+			std::is_integral<T>::value,
+			std::uniform_int_distribution<T>,
+			std::uniform_real_distribution<T>
+			>::type;
+
+		thread_local static Distribution dist;
+
+		return dist(RandomGenerator(), typename Distribution::param_type { from, to });
 	}
 
 private:
