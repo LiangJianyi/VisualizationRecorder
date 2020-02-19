@@ -42,8 +42,8 @@ App::App()
 /// <param name="e">Details about the launch request and process.</param>
 void App::OnLaunched(LaunchActivatedEventArgs const& e)
 {
-    ApplicationView::PreferredLaunchViewSize(Size(700, 500));
-    ApplicationView::PreferredLaunchWindowingMode(ApplicationViewWindowingMode::PreferredLaunchViewSize);
+    ApplicationView::GetForCurrentView().PreferredLaunchViewSize(Size(700, 500));
+    ApplicationView::GetForCurrentView().PreferredLaunchWindowingMode(ApplicationViewWindowingMode::PreferredLaunchViewSize);
     Frame rootFrame{ nullptr };
     auto content = Window::Current().Content();
     if (content)
@@ -109,6 +109,7 @@ void App::OnLaunched(LaunchActivatedEventArgs const& e)
 void App::OnSuspending([[maybe_unused]] IInspectable const& sender, [[maybe_unused]] SuspendingEventArgs const& e)
 {
     // Save application state and stop any background activity
+    _CrtDumpMemoryLeaks();
 }
 
 /// <summary>
