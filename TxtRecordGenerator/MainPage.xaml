@@ -60,7 +60,7 @@
                 Content="生成事件记录文本" 
                 Grid.Row="2" 
                 Grid.Column="1"
-                Click="GeneratorButton_Click" 
+                Click="GeneratorButton_ClickAsync" 
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"/>
         <controls:NumberBox x:Name="EntriesTotal"
@@ -73,5 +73,11 @@
                    Grid.Row="2"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"/>
+        <controls:TeachingTip x:Name="GeneratorTip" 
+                              Title="文件已写入">
+            <controls:TeachingTip.IconSource>
+                <controls:SymbolIconSource Symbol="Save" />
+            </controls:TeachingTip.IconSource>
+        </controls:TeachingTip>
     </Grid>
 </Page>
