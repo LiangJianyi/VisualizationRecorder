@@ -152,7 +152,7 @@ namespace VisualizationRecorder {
                 return new StatistTotalByDateTime() { DateTime = new DateTime(yearValue, monthValue, dayValue), Total = count };
             }
             else {
-                throw new ArgumentOutOfRangeException($"Date time format error: {tokens}");
+                throw new ArgumentOutOfRangeException($"Date time format error: {string.Join(' ', tokens)}");
             }
         }
 
@@ -185,7 +185,7 @@ namespace VisualizationRecorder {
                 return new DateTime(yearValue, monthValue, dayValue);
             }
             else {
-                throw new ArgumentOutOfRangeException($"Date time format error: {tokens}");
+                throw new ArgumentOutOfRangeException($"Date time format error: {string.Join(' ', tokens)}");
             }
         }
 

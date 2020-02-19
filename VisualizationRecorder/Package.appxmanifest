@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="40318JanyeeLiang.30940293423D7" Publisher="CN=5933F7EB-A1E4-4F91-AB70-7330D86D7948" Version="1.0.1.0" />
+  <Identity Name="40318JanyeeLiang.30940293423D7" Publisher="CN=5933F7EB-A1E4-4F91-AB70-7330D86D7948" Version="1.1.1.0" />
   <mp:PhoneIdentity PhoneProductId="61049f9c-ad31-43b6-b42e-f65e95c37adf" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>可视化事件记录器</DisplayName>
