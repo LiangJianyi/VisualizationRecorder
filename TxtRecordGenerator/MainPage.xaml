@@ -6,9 +6,10 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:Microsoft.UI.Xaml.Controls"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    Background="{StaticResource SystemControlAltMediumLowAcrylicWindowMediumBrush}">
 
-    <Grid>
+    <Grid Width="700" Height="500" HorizontalAlignment="Center" VerticalAlignment="Center">
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition/>
@@ -63,6 +64,14 @@
                 Click="GeneratorButton_ClickAsync" 
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"/>
+        <ProgressRing x:Name="Ring" 
+                      FontSize="25" 
+                      Foreground="{StaticResource SystemAccentColorDark1}" 
+                      IsActive="False"
+                      Grid.Row="2" 
+                      Grid.Column="1" 
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"/>
         <controls:NumberBox x:Name="EntriesTotal"
                    Header="生成记录数目:" 
                    Value="1" 
@@ -74,7 +83,8 @@
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"/>
         <controls:TeachingTip x:Name="GeneratorTip" 
-                              Title="文件已写入">
+                              Title="文件已写入"
+                              IsLightDismissEnabled="True">
             <controls:TeachingTip.IconSource>
                 <controls:SymbolIconSource Symbol="Save" />
             </controls:TeachingTip.IconSource>

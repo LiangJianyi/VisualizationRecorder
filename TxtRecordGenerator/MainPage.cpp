@@ -1,16 +1,9 @@
 ﻿#include "pch.h"
 #include "MainPage.h"
 #include "MainPage.g.cpp"
-#include "../../SundryUtilty/Cpp code files/JanyeeDateTime/DateTime.h"
 #include "MainPageHelper.h"
 #include <string>
 
-using namespace winrt;
-using namespace Windows::UI::Xaml;
-using namespace Windows::UI::Xaml::Controls;
-using namespace Windows::Foundation;
-using namespace Windows::Storage;
-using namespace Windows::Storage::Pickers;
 
 namespace winrt::TxtRecordGenerator::implementation
 {
@@ -28,6 +21,8 @@ namespace winrt::TxtRecordGenerator::implementation
 
 
 IAsyncAction winrt::TxtRecordGenerator::implementation::MainPage::GeneratorButton_ClickAsync(winrt::Windows::Foundation::IInspectable const&, winrt::Windows::UI::Xaml::RoutedEventArgs const&) {
+	GeneratorButton().Visibility(Visibility::Collapsed);
+	Ring().IsActive(true);
 	IReference<DateTime> beginDateRef = BeginDatePicker().Date();
 	IReference<DateTime> endDateRef = EndDatePicker().Date();
 	if (beginDateRef != nullptr && endDateRef != nullptr) {
@@ -46,6 +41,31 @@ IAsyncAction winrt::TxtRecordGenerator::implementation::MainPage::GeneratorButto
 		OutputDebugStringA(("endDateTime: " + endDateTime.ToString() + "\n").c_str());
 
 		std::shared_ptr<std::wstringstream> s = std::make_shared<std::wstringstream>();
+		auto picker = FolderPicker::FolderPicker();
+		picker.ViewMode(PickerViewMode::Thumbnail);
+		picker.SuggestedStartLocation(PickerLocationId::Downloads);
+		picker.FileTypeFilter().Append(L".txt");
+		auto folder = co_await picker.PickSingleFolderAsync();
+		co_await GenerateDateEntryAsync(folder, s, beginDateTime, endDateTime);
+		Ring().IsActive(false);
+		GeneratorTip().IsOpen(true);
+		GeneratorButton().Visibility(Visibility::Collapsed);
+	}
+	else {
+		std::shared_ptr<ContentDialog> c = std::make_shared<ContentDialog>();
+		c->Title(box_value(L"Error"));
+		c->Content(box_value(L"You not pick a date."));
+		c->CloseButtonText(L"Close");
+		co_await c->ShowAsync();
+	}
+}
+
+IAsyncAction winrt::TxtRecordGenerator::implementation::MainPage::GenerateDateEntryAsync(StorageFolder folder, std::shared_ptr<std::wstringstream> s, Janyee::DateTime beginDateTime, Janyee::DateTime endDateTime) {
+	auto strong_this { get_strong() };
+	if (folder != nullptr) {
+		Windows::Storage::AccessCache::StorageApplicationPermissions::FutureAccessList().AddOrReplace(L"PickedFolderToken", folder);
+		co_await folder.CreateFileAsync(L"sample.txt", Windows::Storage::CreationCollisionOption::ReplaceExisting);
+		auto file = co_await folder.GetFileAsync(L"sample.txt");
 		for (uint32_t i = 0; i < EntriesTotal().Value(); i++) {
 			try {
 				const auto& entry = MainPageHelper::RandomDateTime(beginDateTime, endDateTime);
@@ -57,32 +77,17 @@ IAsyncAction winrt::TxtRecordGenerator::implementation::MainPage::GeneratorButto
 					<< L"\n";
 				OutputDebugStringA(Janyee::Utilty::WstringToString(s->str()).c_str());
 
-				auto picker = FolderPicker::FolderPicker();
-				picker.ViewMode(PickerViewMode::Thumbnail);
-				picker.SuggestedStartLocation(PickerLocationId::Downloads);
-				picker.FileTypeFilter().Append(L".txt");
-				auto folder = co_await picker.PickSingleFolderAsync();
-				if (folder != nullptr) {
-					Windows::Storage::AccessCache::StorageApplicationPermissions::FutureAccessList().AddOrReplace(L"PickedFolderToken", folder);
-					co_await folder.CreateFileAsync(L"sample.txt", Windows::Storage::CreationCollisionOption::ReplaceExisting);
-					auto file = co_await folder.GetFileAsync(L"sample.txt");
-					co_await Windows::Storage::FileIO::WriteTextAsync(file, s->str());
-					GeneratorTip().IsOpen(true);
-				}
-				s->clear();
 			}
 			catch (const Janyee::DateTimeException & e) {
 				OutputDebugStringA(e.what());
 				throw e;
 			}
+			catch (const std::exception & e) {
+				OutputDebugStringA(e.what());
+				throw e;
+			}
+			co_await Windows::Storage::FileIO::WriteTextAsync(file, s->str());
+			s->clear();
 		}
-	}
-	else {
-		std::shared_ptr<ContentDialog> c = std::make_shared<ContentDialog>();
-		c->Title(box_value(L"Error"));
-		c->Content(box_value(L"You not pick a date."));
-		c->CloseButtonText(L"Close");
-		co_await c->ShowAsync();
-		//std::string* s = new std::string("aaaaaaaaaaaaaaaaaaaaaaaaaaa");
 	}
 }

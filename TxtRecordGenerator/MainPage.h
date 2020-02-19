@@ -1,6 +1,14 @@
 ﻿#pragma once
 
 #include "MainPage.g.h"
+#include "../../SundryUtilty/Cpp code files/JanyeeDateTime/DateTime.h"
+
+using namespace winrt;
+using namespace Windows::UI::Xaml;
+using namespace Windows::UI::Xaml::Controls;
+using namespace Windows::Foundation;
+using namespace Windows::Storage;
+using namespace Windows::Storage::Pickers;
 
 namespace winrt::TxtRecordGenerator::implementation
 {
@@ -8,7 +16,8 @@ namespace winrt::TxtRecordGenerator::implementation
     {
         MainPage();
 		void UpdateLayout();
-		winrt::Windows::Foundation::IAsyncAction GeneratorButton_ClickAsync(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::UI::Xaml::RoutedEventArgs const& e);
+		IAsyncAction GeneratorButton_ClickAsync(IInspectable const& sender, RoutedEventArgs const& e);
+        IAsyncAction GenerateDateEntryAsync(StorageFolder folder, std::shared_ptr<std::wstringstream> s, Janyee::DateTime beginDateTime, Janyee::DateTime endDateTime);
 	};
 }
 
