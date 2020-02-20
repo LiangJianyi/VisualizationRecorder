@@ -1,2 +1,2 @@
-MainPackage=C:\Users\a124p\Documents\GitHub\VisualizationRecorder\VisualizationRecorder\bin\x86\Release\Upload\VisualizationRecorder_1.0.1.0_x86.appx
-SymbolPackage=C:\Users\a124p\Documents\GitHub\VisualizationRecorder\VisualizationRecorder\bin\x86\Release\Upload\VisualizationRecorder_1.0.1.0\VisualizationRecorder_1.0.1.0_x86.appxsym
+MainPackage=C:\Users\a124p\Documents\GitHub\VisualizationRecorder\VisualizationRecorder\bin\x86\Release\Upload\VisualizationRecorder_1.1.1.0_x86.appx
+SymbolPackage=C:\Users\a124p\Documents\GitHub\VisualizationRecorder\VisualizationRecorder\bin\x86\Release\Upload\VisualizationRecorder_1.1.1.0\VisualizationRecorder_1.1.1.0_x86.appxsym
