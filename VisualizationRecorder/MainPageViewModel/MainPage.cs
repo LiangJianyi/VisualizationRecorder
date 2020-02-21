@@ -285,6 +285,9 @@ namespace VisualizationRecorder {
             RootGrid.Height = this.Window.Bounds.Height - ((double)RootCanvas.Resources["CanvasTopForRootGrid"]);
             Canvas.SetTop(AvatarStack, 80);
             Canvas.SetLeft(AvatarStack, this.Window.Bounds.Width - AvatarStack.ActualWidth - 50);
+            Canvas.SetTop(SettingPanle, 0);
+            Canvas.SetLeft(SettingPanle, this.Window.Bounds.Width);
+            SettingPanle.Height = this.Window.Bounds.Height;
         }
 
         /// <summary>
@@ -469,7 +472,7 @@ namespace VisualizationRecorder {
             string text = await FileIO.ReadTextAsync(file);
             if (file.FileType == ".txt") {
                 IEnumerable<string> lines = DatetimeParser.SplitByLine(text);
-                return new StatistTotalByDateTimeModel(lines);
+                return new StatistTotalByDateTimeModel(lines, _dateMode);
             }
             else if (file.FileType == ".mast") {
                 JymlAST.Cons ast = JymlParser.Parser.GenerateAst(text);

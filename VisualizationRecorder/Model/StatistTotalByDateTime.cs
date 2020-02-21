@@ -100,41 +100,6 @@ namespace VisualizationRecorder {
     class StatistTotalByDateTimeModel {
         private readonly SortedList<DateTime, StatistTotalByDateTime> _entries = new SortedList<DateTime, StatistTotalByDateTime>();
         public SortedList<DateTime, StatistTotalByDateTime> Entries => _entries;
-        /// <summary>
-        /// 该构造器接收一个字符串序列，把它转换成 StatistTotalByDateTime 序列
-        /// </summary>
-        /// <param name="lines">文本序列</param>
-        public StatistTotalByDateTimeModel(IEnumerable<string> lines) {
-            foreach (var line in lines) {
-                if (line != string.Empty && line != "\r") {   // 忽略空行
-                    StatistTotalByDateTime statist = DatetimeParser.ParseExpressToStatistTotalByDateTime(line);
-                    this.Add(statist);
-                }
-            }
-        }
-
-        /// <summary>
-        /// 该构造器接收一个 StatistTotalByDateTime 序列
-        /// </summary>
-        /// <param name="statistTotalByDateTimes"></param>
-        public StatistTotalByDateTimeModel(IEnumerable<StatistTotalByDateTime> statistTotalByDateTimes) {
-            foreach (var statist in statistTotalByDateTimes) {
-                this.Add(statist);
-            }
-        }
-
-        /// <summary>
-        /// 添加 StatistTotalByDateTime，如果存在相同日期的事件，则累加该事件的 Total
-        /// </summary>
-        /// <param name="statist"></param>
-        private void Add(StatistTotalByDateTime statist) {
-            try {
-                this._entries.Add(statist.DateTime, statist);
-            }
-            catch (ArgumentException) {
-                this._entries[statist.DateTime].Total += statist.Total;
-            }
-        }
 
         /// <summary>
         /// 该构造器接收一个字符串序列，把它转换成StatistTotalByDateTime链表，同时接收一个 DateMode 指示日期字符串的分割方式
@@ -162,6 +127,29 @@ namespace VisualizationRecorder {
                     statist.Total = total;
                     this.Add(statist);
                 }
+            }
+        }
+
+        /// <summary>
+        /// 该构造器接收一个 StatistTotalByDateTime 序列
+        /// </summary>
+        /// <param name="statistTotalByDateTimes"></param>
+        public StatistTotalByDateTimeModel(IEnumerable<StatistTotalByDateTime> statistTotalByDateTimes) {
+            foreach (var statist in statistTotalByDateTimes) {
+                this.Add(statist);
+            }
+        }
+
+        /// <summary>
+        /// 添加 StatistTotalByDateTime，如果存在相同日期的事件，则累加该事件的 Total
+        /// </summary>
+        /// <param name="statist"></param>
+        private void Add(StatistTotalByDateTime statist) {
+            try {
+                this._entries.Add(statist.DateTime, statist);
+            }
+            catch (ArgumentException) {
+                this._entries[statist.DateTime].Total += statist.Total;
             }
         }
         /// <summary>

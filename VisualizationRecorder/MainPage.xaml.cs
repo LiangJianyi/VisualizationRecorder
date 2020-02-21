@@ -34,6 +34,10 @@ namespace VisualizationRecorder {
         /// </summary>
         private static StatistTotalByDateTimeModel _model = null;
         /// <summary>
+        /// 设置日期文本格式
+        /// </summary>
+        private static DateMode _dateMode = DateMode.DateWithWhiteSpace;
+        /// <summary>
         /// 文件的保存模式
         /// </summary>
         private static SaveMode _saveMode = SaveMode.NewFile;
@@ -142,7 +146,7 @@ namespace VisualizationRecorder {
             }
             else {
                 // _model 为 null 证明用户在空白的状态下添加新条目
-                _model = new StatistTotalByDateTimeModel(new string[] { rectangle.Name }, DateMode.DateWithSlash);
+                _model = new StatistTotalByDateTimeModel(new string[] { rectangle.Name }, _dateMode);
 #if DEBUG
                 ToolTip toolTip = new ToolTip {
                     Content = rectangle.Name + $"  Level:0  Total:1  Color:{(rectangle.Fill as SolidColorBrush).Color}"
@@ -310,6 +314,47 @@ namespace VisualizationRecorder {
                 }
             }
             base.OnNavigatedTo(e);
+        }
+
+        private void SettingButton_Click(object sender, RoutedEventArgs e) {
+            if (Canvas.GetLeft(SettingPanle) == this.Window.Bounds.Width) {
+                Canvas.SetLeft(SettingPanle, this.Window.Bounds.Width - SettingPanle.Width);
+            }
+            else {
+                Canvas.SetLeft(SettingPanle, this.Window.Bounds.Width);
+            }
+        }
+
+        private void Page_PointerPressed(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e) {
+            if (Canvas.GetLeft(SettingPanle) < this.Window.Bounds.Width) {
+                Canvas.SetLeft(SettingPanle, this.Window.Bounds.Width);
+            }
+        }
+
+        private void SettingPanle_PointerPressed(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e) {
+            e.Handled = true;
+        }
+
+        private void DateWithWhiteSpaceToggleMenuFlyoutItem_Click(object sender, RoutedEventArgs e) {
+            ToggleMenuFlyoutItem toggle = sender as ToggleMenuFlyoutItem;
+            if (toggle.IsChecked == true) {
+                DateWithSlashToggleMenuFlyoutItem.IsChecked = !toggle.IsChecked;
+                _dateMode = DateWithSlashToggleMenuFlyoutItem.IsChecked ? DateMode.DateWithSlash : DateMode.DateWithWhiteSpace;
+            }
+            else {
+                toggle.IsChecked = true;
+            }
+        }
+
+        private void DateWithSlashToggleMenuFlyoutItem_Click(object sender, RoutedEventArgs e) {
+            ToggleMenuFlyoutItem toggle = sender as ToggleMenuFlyoutItem;
+            if (toggle.IsChecked == true) {
+                DateWithWhiteSpaceToggleMenuFlyoutItem.IsChecked = !toggle.IsChecked;
+                _dateMode = DateWithWhiteSpaceToggleMenuFlyoutItem.IsChecked ? DateMode.DateWithWhiteSpace : DateMode.DateWithSlash;
+            }
+            else {
+                toggle.IsChecked = true;
+            }
         }
     }
 }

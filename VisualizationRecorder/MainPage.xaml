@@ -6,24 +6,26 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    PointerPressed="Page_PointerPressed">
 
-    <Canvas Name="RootCanvas" Loaded="RootCanvas_Loaded">
+    <Canvas Name="RootCanvas" Background="{ThemeResource SystemControlAcrylicWindowMediumHighBrush}" 
+            Loaded="RootCanvas_Loaded">
         <Canvas.Resources>
             <x:Double x:Key="CanvasTopForRootGrid">100.0</x:Double>
             <x:String x:Key="DemoAvatar">https://previews.123rf.com/images/urfandadashov/urfandadashov1809/urfandadashov180900496/109085218-demo-vector-icon-isolated-on-transparent-background-demo-logo-concept.jpg</x:String>
         </Canvas.Resources>
-        <CommandBar Name="Menu" Width="800">
+        <CommandBar Name="Menu" Width="800" Canvas.ZIndex="1">
+            <AppBarButton x:Name="SettingButton" Icon="Setting" Label="Setting" Click="SettingButton_Click"/>
             <AppBarButton x:Name="RefreshButton" Icon="Refresh" Label="Refresh" Click="Refresh_Click"/>
             <AppBarButton x:Name="ClearButton" Icon="Clear" Label="Clear all recorde" Click="ClearButton_Click"/>
             <AppBarButton x:Name="OpenFileButton" Icon="OpenFile" Label="Pick record" Click="OpenFileButtonAsync_Click"/>
             <AppBarButton x:Name="SaveFileButton" Icon="Save" Label="Save" Click="SaveFileButtonAsync_Click"/>
         </CommandBar>
-        <StackPanel x:Name="AvatarStack">
+        <StackPanel x:Name="AvatarStack" Canvas.ZIndex="1">
             <Image x:Name="Avatar" Width="80" Height="80" Source="Assets/avatar_icon.png"/>
             <TextBlock x:Name="UserName" Text="DemoUser" HorizontalAlignment="Center"/>
         </StackPanel>
-        <Grid Name="RootGrid" Width="800" Height="600" Canvas.Top="100">
+        <Grid Name="RootGrid" Width="800" Height="600" Canvas.Top="100" Canvas.ZIndex="1">
             <TextBlock x:Name="TitleTextBlock" Text="Title" FontSize="55" HorizontalAlignment="Center" Margin="0,100,0,0"/>
             <Border x:Name="OutermostBorder" BorderBrush="LightGray" BorderThickness="2" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <ScrollViewer x:Name="VisualEventFrequencyRecorder" VerticalScrollMode="Auto">
@@ -43,5 +45,18 @@
                 </ScrollViewer>
             </Border>
         </Grid>
+        <StackPanel x:Name="SettingPanle" Orientation="Vertical" Width="300" Height="500" 
+                    Background="Black" 
+                    Canvas.ZIndex="2"
+                    PointerPressed="SettingPanle_PointerPressed">
+            <Button x:Name="DateModeButton" Content="设置日期文本格式" HorizontalAlignment="Center" Margin="0,20,0,0">
+                <Button.Flyout>
+                    <MenuFlyout>
+                        <ToggleMenuFlyoutItem x:Name="DateWithWhiteSpaceToggleMenuFlyoutItem" Text="使用空格分隔" IsChecked="True" Click="DateWithWhiteSpaceToggleMenuFlyoutItem_Click"/>
+                        <ToggleMenuFlyoutItem x:Name="DateWithSlashToggleMenuFlyoutItem" Text="使用斜杆分割" IsChecked="False" Click="DateWithSlashToggleMenuFlyoutItem_Click"/>
+                    </MenuFlyout>
+                </Button.Flyout>
+            </Button>
+        </StackPanel>
     </Canvas>
 </Page>
