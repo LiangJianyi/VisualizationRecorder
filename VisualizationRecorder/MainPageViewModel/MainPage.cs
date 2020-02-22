@@ -472,7 +472,7 @@ namespace VisualizationRecorder {
             string text = await FileIO.ReadTextAsync(file);
             if (file.FileType == ".txt") {
                 IEnumerable<string> lines = DatetimeParser.SplitByLine(text);
-                return new StatistTotalByDateTimeModel(lines, _dateMode);
+                return new StatistTotalByDateTimeModel(lines, (DateMode)_localSettings.Values["DateMode"]);
             }
             else if (file.FileType == ".mast") {
                 JymlAST.Cons ast = JymlParser.Parser.GenerateAst(text);

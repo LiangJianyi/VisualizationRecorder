@@ -34,9 +34,9 @@ namespace VisualizationRecorder {
         /// </summary>
         private static StatistTotalByDateTimeModel _model = null;
         /// <summary>
-        /// 设置日期文本格式
+        /// 设置本应用的配置
         /// </summary>
-        private static DateMode _dateMode = DateMode.DateWithWhiteSpace;
+        private static ApplicationDataContainer _localSettings = ApplicationData.Current.LocalSettings;
         /// <summary>
         /// 文件的保存模式
         /// </summary>
@@ -50,6 +50,8 @@ namespace VisualizationRecorder {
             this.Window.SizeChanged += Current_SizeChanged;
             this.InitializeComponent();
             this._earliestRectangle = this.RectanglesLayout(this.CurrentRectanglesCanvas, new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day));
+            _localSettings.Values["DateMode"] = DateMode.DateWithWhiteSpace;
+            _localSettings.Values["SaveMode"] = SaveMode.NewFile;
         }
 
         /// <summary>
@@ -146,7 +148,7 @@ namespace VisualizationRecorder {
             }
             else {
                 // _model 为 null 证明用户在空白的状态下添加新条目
-                _model = new StatistTotalByDateTimeModel(new string[] { rectangle.Name }, _dateMode);
+                _model = new StatistTotalByDateTimeModel(new string[] { rectangle.Name }, (DateMode)_localSettings.Values["DateMode"]);
 #if DEBUG
                 ToolTip toolTip = new ToolTip {
                     Content = rectangle.Name + $"  Level:0  Total:1  Color:{(rectangle.Fill as SolidColorBrush).Color}"
@@ -339,7 +341,7 @@ namespace VisualizationRecorder {
             ToggleMenuFlyoutItem toggle = sender as ToggleMenuFlyoutItem;
             if (toggle.IsChecked == true) {
                 DateWithSlashToggleMenuFlyoutItem.IsChecked = !toggle.IsChecked;
-                _dateMode = DateWithSlashToggleMenuFlyoutItem.IsChecked ? DateMode.DateWithSlash : DateMode.DateWithWhiteSpace;
+                _localSettings.Values["DateMode"] = DateWithSlashToggleMenuFlyoutItem.IsChecked ? DateMode.DateWithSlash : DateMode.DateWithWhiteSpace;
             }
             else {
                 toggle.IsChecked = true;
@@ -350,7 +352,7 @@ namespace VisualizationRecorder {
             ToggleMenuFlyoutItem toggle = sender as ToggleMenuFlyoutItem;
             if (toggle.IsChecked == true) {
                 DateWithWhiteSpaceToggleMenuFlyoutItem.IsChecked = !toggle.IsChecked;
-                _dateMode = DateWithWhiteSpaceToggleMenuFlyoutItem.IsChecked ? DateMode.DateWithWhiteSpace : DateMode.DateWithSlash;
+                _localSettings.Values["DateMode"] = DateWithWhiteSpaceToggleMenuFlyoutItem.IsChecked ? DateMode.DateWithWhiteSpace : DateMode.DateWithSlash;
             }
             else {
                 toggle.IsChecked = true;
