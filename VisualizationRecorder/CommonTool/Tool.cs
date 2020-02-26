@@ -2,12 +2,12 @@
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.Streams;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace VisualizationRecorder.CommonTool {
     static class Tool {
-
         /// <summary>
         /// 从流中提取照片设置传递进去的 Image 控件
         /// </summary>
@@ -119,5 +119,52 @@ namespace VisualizationRecorder.CommonTool {
                 return bitmapImage;
             }
         }
+
+        /// <summary>
+        /// 表示应用的本地配置
+        /// </summary>
+        [Serializable]
+        public class LocalSetting {
+            private static LocalSetting _localSettingInstance;
+            public static LocalSetting LocalSettingInstance {
+                get {
+                    if (_localSettingInstance == null) {
+                        _localSettingInstance = new LocalSetting();
+                    }
+                    return _localSettingInstance;
+                }
+                private set {
+                    _localSettingInstance = value;
+                }
+            }
+            public LocalSetting() {
+                this.DateMode = DateMode.DateWithWhiteSpace;
+                this.SaveMode = SaveMode.OrginalFile;
+                this.Theme = Application.Current.RequestedTheme;
+            }
+            public DateMode DateMode { get; set; }
+            public SaveMode SaveMode { get; set; }
+            public ApplicationTheme Theme { get; set; }
+
+            public static void SetNewInstance(LocalSetting localSetting) => LocalSettingInstance = localSetting;
+        }
+    }
+
+    /// <summary>
+    /// 日期格式
+    /// </summary>
+    [Serializable]
+    enum DateMode {
+        DateWithWhiteSpace,
+        DateWithSlash
+    }
+
+    /// <summary>
+    /// 文件保存模式
+    /// </summary>
+    [Serializable]
+    enum SaveMode {
+        NewFile,
+        OrginalFile
     }
 }

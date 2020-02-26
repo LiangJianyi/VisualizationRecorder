@@ -34,14 +34,6 @@ namespace VisualizationRecorder {
         /// </summary>
         private static StatistTotalByDateTimeModel _model = null;
         /// <summary>
-        /// 设置本应用的配置
-        /// </summary>
-        private static ApplicationDataContainer _localSettings = ApplicationData.Current.LocalSettings;
-        /// <summary>
-        /// 文件的保存模式
-        /// </summary>
-        private static SaveMode _saveMode = SaveMode.NewFile;
-        /// <summary>
         /// 保存从文件选择器选取的文件
         /// </summary>
         private static StorageFile _file = null;
@@ -50,8 +42,6 @@ namespace VisualizationRecorder {
             this.Window.SizeChanged += Current_SizeChanged;
             this.InitializeComponent();
             this._earliestRectangle = this.RectanglesLayout(this.CurrentRectanglesCanvas, new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day));
-            _localSettings.Values["DateMode"] = DateMode.DateWithWhiteSpace;
-            _localSettings.Values["SaveMode"] = SaveMode.NewFile;
         }
 
         /// <summary>
@@ -83,7 +73,6 @@ namespace VisualizationRecorder {
                 catch (FilePickFaildException err) {
                     PopErrorDialogAsync(err.Message);
                 }
-                _saveMode = SaveMode.OrginalFile; // 表示当前的操作基于磁盘上已有的文件 
             }
         }
 
@@ -148,7 +137,10 @@ namespace VisualizationRecorder {
             }
             else {
                 // _model 为 null 证明用户在空白的状态下添加新条目
-                _model = new StatistTotalByDateTimeModel(new string[] { rectangle.Name }, (DateMode)_localSettings.Values["DateMode"]);
+                _model = new StatistTotalByDateTimeModel(
+                    lines: new string[] { rectangle.Name },
+                    dateMode: Tool.LocalSetting.LocalSettingInstance.DateMode
+                );
 #if DEBUG
                 ToolTip toolTip = new ToolTip {
                     Content = rectangle.Name + $"  Level:0  Total:1  Color:{(rectangle.Fill as SolidColorBrush).Color}"
@@ -220,10 +212,10 @@ namespace VisualizationRecorder {
             // 给用户提供两种保存方式：
             // 1、更新原有文件
             // 2、作为新文件存储
-            switch (_saveMode) {
+            switch (Tool.LocalSetting.LocalSettingInstance.SaveMode) {
                 case SaveMode.NewFile:
                     await SaveNewFileAsync();
-                    _saveMode = SaveMode.OrginalFile;
+                    Tool.LocalSetting.LocalSettingInstance.SaveMode = SaveMode.OrginalFile;
                     break;
                 case SaveMode.OrginalFile:
                     ContentDialog saveDialog = new ContentDialog() {
@@ -239,7 +231,7 @@ namespace VisualizationRecorder {
                     await saveDialog.ShowAsync();
                     break;
                 default:
-                    throw new InvalidOperationException($"Unknown Error. SaveMode = {_saveMode.ToString()}");
+                    throw new InvalidOperationException($"Unknown Error. SaveMode = {Tool.LocalSetting.LocalSettingInstance.SaveMode.ToString()}");
             }
         }
 
@@ -284,7 +276,7 @@ namespace VisualizationRecorder {
             ResetRectangleAndCanvasLayout();
             _model = null;
             _file = null;
-            _saveMode = SaveMode.NewFile;
+            Tool.LocalSetting.LocalSettingInstance.SaveMode = SaveMode.NewFile;
             Blink.BlinkedRectangles.Clear();
             RefreshButton.Visibility = Visibility.Collapsed;
             SaveFileButton.Visibility = Visibility.Collapsed;
@@ -341,7 +333,10 @@ namespace VisualizationRecorder {
             ToggleMenuFlyoutItem toggle = sender as ToggleMenuFlyoutItem;
             if (toggle.IsChecked == true) {
                 DateWithSlashToggleMenuFlyoutItem.IsChecked = !toggle.IsChecked;
-                _localSettings.Values["DateMode"] = DateWithSlashToggleMenuFlyoutItem.IsChecked ? DateMode.DateWithSlash : DateMode.DateWithWhiteSpace;
+
+                Tool.LocalSetting.LocalSettingInstance.DateMode = DateWithSlashToggleMenuFlyoutItem.IsChecked ?
+                                                        DateMode.DateWithSlash :
+                                                        DateMode.DateWithWhiteSpace;
             }
             else {
                 toggle.IsChecked = true;
@@ -352,7 +347,9 @@ namespace VisualizationRecorder {
             ToggleMenuFlyoutItem toggle = sender as ToggleMenuFlyoutItem;
             if (toggle.IsChecked == true) {
                 DateWithWhiteSpaceToggleMenuFlyoutItem.IsChecked = !toggle.IsChecked;
-                _localSettings.Values["DateMode"] = DateWithWhiteSpaceToggleMenuFlyoutItem.IsChecked ? DateMode.DateWithWhiteSpace : DateMode.DateWithSlash;
+                Tool.LocalSetting.LocalSettingInstance.DateMode = DateWithWhiteSpaceToggleMenuFlyoutItem.IsChecked ?
+                                                        DateMode.DateWithWhiteSpace :
+                                                        DateMode.DateWithSlash;
             }
             else {
                 toggle.IsChecked = true;

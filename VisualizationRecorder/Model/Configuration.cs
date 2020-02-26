@@ -2,15 +2,11 @@
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using Windows.Storage;
+using Windows.UI.Xaml;
 using VisualizationRecorder.CommonTool;
 using System.Threading.Tasks;
 
 namespace VisualizationRecorder {
-    [Serializable]
-    enum Theme {
-        Light,
-        Dark
-    }
 
     /// <summary>
     /// 表示用户的配置
@@ -18,12 +14,12 @@ namespace VisualizationRecorder {
     class Configuration {
         public string UserName { get; set; }
         public string Password { get; set; }
-        public Theme Theme { get; set; }
+        public ApplicationTheme Theme { get; set; }
         public string Title { get; set; }
         public StorageFile Avatar { get; set; }
         public StorageFile RecordFile { get; set; }
 
-        public Configuration(string username, string password, string title = "", Theme theme = Theme.Light, StorageFile avatar = null, StorageFile record = null) {
+        public Configuration(string username, string password, string title = "", ApplicationTheme theme = ApplicationTheme.Light, StorageFile avatar = null, StorageFile record = null) {
             this.UserName = username;
             this.Password = password;
             this.Title = title;
@@ -97,7 +93,7 @@ namespace VisualizationRecorder {
     class SerializationConfiguration {
         public string UserName { get; set; }
         public string Password { get; set; }
-        public Theme Theme { get; set; }
+        public ApplicationTheme Theme { get; set; }
         public string Title { get; set; }
         public byte[] Avatar { get; set; }
         public byte[] RecordFile { get; set; }

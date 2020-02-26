@@ -10,18 +10,12 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Shapes;
 using Janyee.Utilty;
+using VisualizationRecorder.CommonTool;
 
 namespace VisualizationRecorder {
     using Debug = System.Diagnostics.Debug;
     using TioSalamanca = List<IGrouping<BigInteger, StatistTotalByDateTime>>;
 
-    /// <summary>
-    /// 文件保存模式
-    /// </summary>
-    enum SaveMode {
-        NewFile,
-        OrginalFile
-    }
 
     /// <summary>
     /// 控制 MainPage.xaml 的视图逻辑
@@ -472,7 +466,10 @@ namespace VisualizationRecorder {
             string text = await FileIO.ReadTextAsync(file);
             if (file.FileType == ".txt") {
                 IEnumerable<string> lines = DatetimeParser.SplitByLine(text);
-                return new StatistTotalByDateTimeModel(lines, (DateMode)_localSettings.Values["DateMode"]);
+                return new StatistTotalByDateTimeModel(
+                    lines: lines,
+                    dateMode: Tool.LocalSetting.LocalSettingInstance.DateMode
+                );
             }
             else if (file.FileType == ".mast") {
                 JymlAST.Cons ast = JymlParser.Parser.GenerateAst(text);

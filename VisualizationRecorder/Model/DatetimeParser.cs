@@ -2,13 +2,10 @@
 using System.Numerics;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using VisualizationRecorder.CommonTool;
 
 [assembly: InternalsVisibleTo("VisualizationRecorderTest")]
 namespace VisualizationRecorder {
-    enum DateMode {
-        DateWithWhiteSpace,
-        DateWithSlash
-    }
 
     static class DatetimeParser {
         /// <summary>

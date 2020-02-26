@@ -10,7 +10,7 @@ namespace VisualizationRecorder {
     public sealed partial class RegisterPage : Page {
         private SqlDbHelper.SqlDbHelper _sqlDbHelper = SqlDbHelper.SqlDbHelper.GetSqlDbHelper(SqlDbHelperType.LocalSqlDbHelper);
 
-        private Theme _theme;
+        private ApplicationTheme _theme;
         private StorageFile _file;
 
         public RegisterPage() {
@@ -78,11 +78,11 @@ namespace VisualizationRecorder {
         }
 
         private void LightRadioButton_Checked(object sender, RoutedEventArgs e) {
-            this._theme = Theme.Light;
+            this._theme = ApplicationTheme.Light;
         }
 
         private void DarkRadioButton_Checked(object sender, RoutedEventArgs e) {
-            this._theme = Theme.Dark;
+            this._theme = ApplicationTheme.Dark;
         }
     }
 }

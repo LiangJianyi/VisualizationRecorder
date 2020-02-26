@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using Janyee.Utilty;
+using VisualizationRecorder.CommonTool;
 
 namespace VisualizationRecorder {
     using TioSalamanca = List<IGrouping<BigInteger, StatistTotalByDateTime>>;
