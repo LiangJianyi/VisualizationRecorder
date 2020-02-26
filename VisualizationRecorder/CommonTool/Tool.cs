@@ -140,11 +140,17 @@ namespace VisualizationRecorder.CommonTool {
             public LocalSetting() {
                 this.DateMode = DateMode.DateWithWhiteSpace;
                 this.SaveMode = SaveMode.OrginalFile;
-                this.Theme = Application.Current.RequestedTheme;
+                // 获取系统当前主题颜色
+                // 不使用 Application.RequestedTheme 是因为
+                // 在 App 构造函数初始化阶段执行 Application.RequestedTheme
+                // 会导致 System.AccessViolationException 异常
+                var systemTheme = new Windows.UI.ViewManagement.UISettings();
+                var uiTheme = systemTheme.GetColorValue(Windows.UI.ViewManagement.UIColorType.Background).ToString();
+                this.Theme = uiTheme == "#FF000000" ? Theme.Dark : Theme.Light;
             }
             public DateMode DateMode { get; set; }
             public SaveMode SaveMode { get; set; }
-            public ApplicationTheme Theme { get; set; }
+            public Theme Theme { get; set; }
 
             public static void SetNewInstance(LocalSetting localSetting) => LocalSettingInstance = localSetting;
         }
@@ -166,5 +172,13 @@ namespace VisualizationRecorder.CommonTool {
     enum SaveMode {
         NewFile,
         OrginalFile
+    }
+    /// <summary>
+    /// 应用主题颜色
+    /// </summary>
+    [Serializable]
+    enum Theme {
+        Light,
+        Dark
     }
 }
