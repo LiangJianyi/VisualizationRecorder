@@ -36,6 +36,7 @@ namespace VisualizationRecorder {
             TimeSpan delay = TimeSpan.FromSeconds(1);
             ThreadPoolTimer timer = ThreadPoolTimer.CreateTimer(
                 async (source) => {
+                    // C:\Users\a124p\AppData\Local\Packages\40318JanyeeLiang.30940293423D7_08ek7rcm75gt0\LocalState
                     StorageFolder localFolder = ApplicationData.Current.LocalFolder;
                     StorageFile appSettingFile = await localFolder.CreateFileAsync("VisualizationRecorderSetting", CreationCollisionOption.OpenIfExists);
                     var buffer = await FileIO.ReadBufferAsync(appSettingFile);

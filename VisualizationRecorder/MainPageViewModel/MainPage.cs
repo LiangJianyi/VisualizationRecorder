@@ -370,9 +370,6 @@ namespace VisualizationRecorder {
         /// <summary>
         /// 将变更作为新文件存储。
         /// </summary>
-        /// <returns>
-        /// 返回一个元组，Status 字段代表文件的更新状态，FileIsPick 字段代表用户是否在文件选取器上选取文件，true 为已选取，false 为用户关闭了文件选取器
-        /// </returns>
         private async Task SaveNewFileAsync() {
             FileSavePicker savePicker = new FileSavePicker {
                 SuggestedStartLocation = PickerLocationId.DocumentsLibrary,
@@ -383,6 +380,7 @@ namespace VisualizationRecorder {
             if (file != null) {
                 Windows.Storage.Provider.FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
                 switch (status) {
+                    case Windows.Storage.Provider.FileUpdateStatus.CompleteAndRenamed:
                     case Windows.Storage.Provider.FileUpdateStatus.Complete:
                         await FileIO.WriteLinesAsync(file, _model.ToStringArray());
                         break;
@@ -390,7 +388,6 @@ namespace VisualizationRecorder {
                     case Windows.Storage.Provider.FileUpdateStatus.UserInputNeeded:
                     case Windows.Storage.Provider.FileUpdateStatus.CurrentlyUnavailable:
                     case Windows.Storage.Provider.FileUpdateStatus.Failed:
-                    case Windows.Storage.Provider.FileUpdateStatus.CompleteAndRenamed:
                     default:
                         throw new FilePickFaildException($"Pick a file faild! Windows.Storage.Provider.FileUpdateStatus = {status}");
                 }
@@ -401,12 +398,11 @@ namespace VisualizationRecorder {
         /// <summary>
         /// 将变更覆盖原有文件。
         /// </summary>
-        /// <returns></returns>
         private async Task SaveOrginalFileAsync() {
             CachedFileManager.DeferUpdates(_file);
             await FileIO.WriteLinesAsync(_file, _model.ToStringArray());
             Windows.Storage.Provider.FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(_file);
-            if (status == Windows.Storage.Provider.FileUpdateStatus.Complete) {
+            if (status == Windows.Storage.Provider.FileUpdateStatus.Complete || status == Windows.Storage.Provider.FileUpdateStatus.CompleteAndRenamed) {
                 Debug.WriteLine("File " + _file.Name + " was saved.");
             }
             else {

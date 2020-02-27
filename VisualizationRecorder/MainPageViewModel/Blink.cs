@@ -5,6 +5,9 @@ using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Shapes;
 
 namespace VisualizationRecorder {
+    /// <summary>
+    /// 表示闪烁动画，提示用户该方块有未保存的变更
+    /// </summary>
     static class Blink {
         /// <summary>
         /// 记录处于闪烁状态的方块的名称
