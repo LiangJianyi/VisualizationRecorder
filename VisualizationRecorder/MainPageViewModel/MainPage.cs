@@ -292,9 +292,8 @@ namespace VisualizationRecorder {
         private void DrawRectangleColor(TioSalamanca[] entries, bool haveProgressBoard) {
             IDictionary<int, SolidColorBrush> colorDic = ClassifyColorByLevelScore(entries.Length);
 
-            Windows.Foundation.IAsyncAction action = Windows.System.Threading.ThreadPool.RunAsync(
+            Windows.Foundation.IAsyncAction slideOnProgressBoardForCanvas = Windows.System.Threading.ThreadPool.RunAsync(
                 async (asyncAction) => {
-                    GusFring gusFring = new GusFring(entries, colorDic);
                     await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
                         priority: Windows.UI.Core.CoreDispatcherPriority.Normal,
                         agileCallback: () => {
@@ -302,6 +301,24 @@ namespace VisualizationRecorder {
                                 if (haveProgressBoard) {
                                     ProgressBoard.SlideOn(canvas, new ProgressBoard());
                                 }
+                            }
+                        }
+                    );
+                }
+            );
+            Windows.Foundation.IAsyncAction fillRectanglesColor = Windows.System.Threading.ThreadPool.RunAsync(
+                async (asyncAction) => {
+                    GusFring gusFring = new GusFring(entries, colorDic);
+                    var rectangles = from c in this.StackCanvas.Children
+                                     from r in ((Canvas)c).Children
+                                     where r is Rectangle
+                                     // 过滤掉非 Rectangle 的元素（比如 ProgressBoard 和 DateTag）
+                                     select r as Rectangle;
+
+                    await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
+                        priority: Windows.UI.Core.CoreDispatcherPriority.Normal,
+                        agileCallback: () => {
+                            foreach (Canvas canvas in this.StackCanvas.Children) {
                                 foreach (var item in canvas.Children) { // 过滤掉非 Rectangle 的元素（比如 ProgressBoard 和 DateTag）
                                     if (item is Rectangle rect) {
 #if DEBUG
@@ -325,7 +342,8 @@ namespace VisualizationRecorder {
                                 }
                             }
                         });
-                });
+                }
+            );
         }
 
         /// <summary>
