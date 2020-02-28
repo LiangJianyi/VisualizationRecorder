@@ -13,7 +13,10 @@ namespace VisualizationRecorder {
         /// 记录处于闪烁状态的方块的名称
         /// </summary>
         public static SortedDictionary<string, (Rectangle rectangle, Storyboard storyboard)> BlinkedRectangles { get; } = new SortedDictionary<string, (Rectangle rectangle, Storyboard storyboard)>();
-
+        /// <summary>
+        /// 给指定方块播放闪烁
+        /// </summary>
+        /// <param name="target"></param>
         public static void PlayBlink(Rectangle target) {
             if (!BlinkedRectangles.ContainsKey(target.Name)) {
                 BlinkedRectangles.Add(target.Name, (target, new Storyboard()));
@@ -43,11 +46,23 @@ namespace VisualizationRecorder {
                 BlinkedRectangles[target.Name].storyboard.Begin();
             }
         }
-
+        /// <summary>
+        /// 停止指定方块的闪烁
+        /// </summary>
+        /// <param name="target"></param>
         public static void StopBlink(Rectangle target) {
             if (BlinkedRectangles[target.Name].storyboard.GetCurrentState() == ClockState.Active) {
                 BlinkedRectangles[target.Name].storyboard.Stop();
             }
+        }
+        /// <summary>
+        /// 停止所有方块的闪烁
+        /// </summary>
+        public static void StopAllBlink() {
+            foreach (var item in BlinkedRectangles) {
+                item.Value.storyboard.Stop();
+            }
+            BlinkedRectangles.Clear();
         }
     }
 }

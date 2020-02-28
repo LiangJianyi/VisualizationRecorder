@@ -357,9 +357,7 @@ namespace VisualizationRecorder {
                 // 重置方块颜色之后要紧接着清空该表
                 _rectangleRegisteTable.Clear();
                 // 停止所有闪烁状态的方块
-                foreach (var rect in Blink.BlinkedRectangles) {
-                    Blink.StopBlink(rect.Value.rectangle);
-                }
+                Blink.StopAllBlink();
                 // 对 StackCanvas 重新洗牌
                 this.StackCanvas.Children.Clear();
                 this.CurrentRectanglesCanvas = new Canvas() {

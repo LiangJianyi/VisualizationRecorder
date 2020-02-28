@@ -70,12 +70,18 @@ namespace VisualizationRecorder {
                 try {
                     _model = await EncodingToStatistTotalByDateTimeModelAsync(_file);
                     Render(_model, _earliestRectangle);
+                    if (this.ClearButton.Visibility == Visibility.Collapsed) {
+                        this.ClearButton.Visibility = Visibility.Visible;
+                    }
                 }
                 catch (ArgumentException err) {
                     PopErrorDialogAsync(err.Message);
                 }
                 catch (FilePickFaildException err) {
                     PopErrorDialogAsync(err.Message);
+                }
+                finally {
+                    Blink.StopAllBlink();
                 }
             }
         }
@@ -240,6 +246,7 @@ namespace VisualizationRecorder {
                         await saveDialog.ShowAsync();
                         break;
                     default:
+                        Blink.StopAllBlink();
                         throw new InvalidOperationException($"Unknown Error. SaveMode = {Tool.LocalSetting.LocalSettingInstance.SaveMode.ToString()}");
                 }
             }
@@ -247,6 +254,7 @@ namespace VisualizationRecorder {
                 await SaveNewFileAsync();
                 _isBlackPage = false;
             }
+            Blink.StopAllBlink();
         }
 
 
@@ -274,7 +282,7 @@ namespace VisualizationRecorder {
              */
             ResetRectangleAndCanvasLayout();
             DrawRectangleColor(_model?.GroupDateTimesByTotal(), true);
-            Blink.BlinkedRectangles.Clear();
+            Blink.StopAllBlink();
         }
 
         /// <summary>
@@ -292,7 +300,7 @@ namespace VisualizationRecorder {
             _file = null;
             _isBlackPage = true;
             Tool.LocalSetting.LocalSettingInstance.SaveMode = SaveMode.NewFile;
-            Blink.BlinkedRectangles.Clear();
+            Blink.StopAllBlink();
             RefreshButton.Visibility = Visibility.Collapsed;
             SaveFileButton.Visibility = Visibility.Collapsed;
             ClearButton.Visibility = Visibility.Collapsed;
