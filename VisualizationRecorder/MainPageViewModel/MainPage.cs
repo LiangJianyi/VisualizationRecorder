@@ -394,13 +394,13 @@ namespace VisualizationRecorder {
                 SuggestedFileName = "New Record"
             };
             savePicker.FileTypeChoices.Add("Plain Text", new List<string>() { ".txt", ".mast" });
-            StorageFile file = await savePicker.PickSaveFileAsync();
-            if (file != null) {
-                Windows.Storage.Provider.FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
+            _file = await savePicker.PickSaveFileAsync();
+            if (_file != null) {
+                Windows.Storage.Provider.FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(_file);
                 switch (status) {
                     case Windows.Storage.Provider.FileUpdateStatus.CompleteAndRenamed:
                     case Windows.Storage.Provider.FileUpdateStatus.Complete:
-                        await FileIO.WriteLinesAsync(file, _model.ToStringArray());
+                        await FileIO.WriteLinesAsync(_file, _model.ToStringArray());
                         break;
                     case Windows.Storage.Provider.FileUpdateStatus.Incomplete:
                     case Windows.Storage.Provider.FileUpdateStatus.UserInputNeeded:

@@ -26,6 +26,10 @@ namespace VisualizationRecorder {
         /// </summary>
         private Rectangle _earliestRectangle = null;
         /// <summary>
+        /// 表示页面是否空白
+        /// </summary>
+        private bool _isBlackPage = true;
+        /// <summary>
         /// 注册已经填充颜色的 Rectangle，每个 Rectangle 只能注册一次
         /// </summary>
         private static HashSet<Rectangle> _rectangleRegisteTable = new HashSet<Rectangle>();
@@ -110,6 +114,7 @@ namespace VisualizationRecorder {
             // 闪烁动画，提示用户该方块有未保存的变更；
             Blink.PlayBlink(rectangle);
             if (_model != null) {
+                _isBlackPage = false;
                 // 检测用户点击的方块对应的日期在之前打开的记录表中是否存在。
                 // 如果 x.Count() > 0 为 true 证明存在，否则添加新条目。
                 // 注意：x.Count() 和 x.First() 可能会导致两次查询，具体详情参见 MSDN
@@ -207,31 +212,40 @@ namespace VisualizationRecorder {
                 dialog.Hide();
             }
 
-            // 在弹出路径选择器之前应渲染一个悬浮表单，让用户选择
-            // 保存方式、文件格式、文件名
-            // 给用户提供两种保存方式：
-            // 1、更新原有文件
-            // 2、作为新文件存储
-            switch (Tool.LocalSetting.LocalSettingInstance.SaveMode) {
-                case SaveMode.NewFile:
-                    await SaveNewFileAsync();
-                    Tool.LocalSetting.LocalSettingInstance.SaveMode = SaveMode.OrginalFile;
-                    break;
-                case SaveMode.OrginalFile:
-                    ContentDialog saveDialog = new ContentDialog() {
-                        Title = "SaveMode",
-                        Content = "选择一种保存方式：",
-                        PrimaryButtonText = "更新原有文件",
-                        SecondaryButtonText = "作为新文件存储",
-                        CloseButtonText = "放弃更改"
-                    };
-                    saveDialog.PrimaryButtonClick += saveDialog_PrimaryButtonClick;
-                    saveDialog.SecondaryButtonClick += saveDialog_SecondaryButtonClickAsync;
-                    saveDialog.CloseButtonClick += saveDialog_CloseButtonClick;
-                    await saveDialog.ShowAsync();
-                    break;
-                default:
-                    throw new InvalidOperationException($"Unknown Error. SaveMode = {Tool.LocalSetting.LocalSettingInstance.SaveMode.ToString()}");
+            // 根据页面是否空白使用两种策略：
+            // 如果页面的方块已经着色，那么保存变更需要弹出对话框；
+            // 如果页面空白，那么直接保存为新文件；
+            if (_isBlackPage == false) {
+                // 在弹出路径选择器之前应渲染一个对话框，让用户选择
+                // 保存方式、文件格式、文件名
+                // 给用户提供两种保存方式：
+                // 1、更新原有文件
+                // 2、作为新文件存储
+                switch (Tool.LocalSetting.LocalSettingInstance.SaveMode) {
+                    case SaveMode.NewFile:
+                        await SaveNewFileAsync();
+                        Tool.LocalSetting.LocalSettingInstance.SaveMode = SaveMode.OrginalFile;
+                        break;
+                    case SaveMode.OrginalFile:
+                        ContentDialog saveDialog = new ContentDialog() {
+                            Title = "SaveMode",
+                            Content = "选择一种保存方式：",
+                            PrimaryButtonText = "更新原有文件",
+                            SecondaryButtonText = "作为新文件存储",
+                            CloseButtonText = "放弃更改"
+                        };
+                        saveDialog.PrimaryButtonClick += saveDialog_PrimaryButtonClick;
+                        saveDialog.SecondaryButtonClick += saveDialog_SecondaryButtonClickAsync;
+                        saveDialog.CloseButtonClick += saveDialog_CloseButtonClick;
+                        await saveDialog.ShowAsync();
+                        break;
+                    default:
+                        throw new InvalidOperationException($"Unknown Error. SaveMode = {Tool.LocalSetting.LocalSettingInstance.SaveMode.ToString()}");
+                }
+            }
+            else {
+                await SaveNewFileAsync();
+                _isBlackPage = false;
             }
         }
 
@@ -276,6 +290,7 @@ namespace VisualizationRecorder {
             ResetRectangleAndCanvasLayout();
             _model = null;
             _file = null;
+            _isBlackPage = true;
             Tool.LocalSetting.LocalSettingInstance.SaveMode = SaveMode.NewFile;
             Blink.BlinkedRectangles.Clear();
             RefreshButton.Visibility = Visibility.Collapsed;
