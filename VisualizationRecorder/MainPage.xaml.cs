@@ -360,6 +360,7 @@ namespace VisualizationRecorder {
                 Tool.LocalSetting.LocalSettingInstance.DateMode = DateWithSlashToggleMenuFlyoutItem.IsChecked ?
                                                         DateMode.DateWithSlash :
                                                         DateMode.DateWithWhiteSpace;
+                Tool.LocalSetting.SaveSettingFile();
             }
             else {
                 toggle.IsChecked = true;
@@ -373,6 +374,7 @@ namespace VisualizationRecorder {
                 Tool.LocalSetting.LocalSettingInstance.DateMode = DateWithWhiteSpaceToggleMenuFlyoutItem.IsChecked ?
                                                         DateMode.DateWithWhiteSpace :
                                                         DateMode.DateWithSlash;
+                Tool.LocalSetting.SaveSettingFile();
             }
             else {
                 toggle.IsChecked = true;

@@ -52,8 +52,8 @@
             <Button x:Name="DateModeButton" Content="设置日期文本格式" HorizontalAlignment="Center" Margin="0,20,0,0">
                 <Button.Flyout>
                     <MenuFlyout>
-                        <ToggleMenuFlyoutItem x:Name="DateWithWhiteSpaceToggleMenuFlyoutItem" Text="使用空格分隔" IsChecked="True" Click="DateWithWhiteSpaceToggleMenuFlyoutItem_Click"/>
-                        <ToggleMenuFlyoutItem x:Name="DateWithSlashToggleMenuFlyoutItem" Text="使用斜杆分割" IsChecked="False" Click="DateWithSlashToggleMenuFlyoutItem_Click"/>
+                        <ToggleMenuFlyoutItem x:Name="DateWithWhiteSpaceToggleMenuFlyoutItem" Text="使用空格分隔" Click="DateWithWhiteSpaceToggleMenuFlyoutItem_Click"/>
+                        <ToggleMenuFlyoutItem x:Name="DateWithSlashToggleMenuFlyoutItem" Text="使用斜杆分割" Click="DateWithSlashToggleMenuFlyoutItem_Click"/>
                     </MenuFlyout>
                 </Button.Flyout>
             </Button>

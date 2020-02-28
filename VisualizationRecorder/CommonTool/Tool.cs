@@ -2,9 +2,10 @@
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.Streams;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Imaging;
+using Janyee.Utilty;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace VisualizationRecorder.CommonTool {
     static class Tool {
@@ -137,7 +138,51 @@ namespace VisualizationRecorder.CommonTool {
                     _localSettingInstance = value;
                 }
             }
-            public LocalSetting() {
+            public static StorageFile AppSettingFile { get; set; }
+
+            public static void SetNewInstance(LocalSetting localSetting) => LocalSettingInstance = localSetting;
+
+            public static void InitialLocalSetting() {
+                if (_localSettingInstance == null) {
+                    _localSettingInstance = new LocalSetting();
+                }
+            }
+
+            public static void SaveSettingFile() {
+                byte[] bytes = LocalSettingInstance.Serializer();
+                Windows.Foundation.IAsyncAction asyncAction = Windows.System.Threading.ThreadPool.RunAsync(
+                    async (source) => {
+                        await FileIO.WriteBytesAsync(AppSettingFile, bytes);
+                    }
+                );
+            }
+
+            public DateMode DateMode { get; set; }
+            public SaveMode SaveMode { get; set; }
+            public Theme Theme { get; set; }
+
+            private LocalSetting() {
+                Windows.Foundation.IAsyncAction asyncAction = Windows.System.Threading.ThreadPool.RunAsync(
+                    async (source) => {
+                        AppSettingFile = await ApplicationData.
+                                               Current.
+                                               LocalFolder.
+                                               CreateFileAsync("VisualizationRecorderSetting", CreationCollisionOption.OpenIfExists);
+                        IBuffer buffer = await FileIO.ReadBufferAsync(AppSettingFile);
+                        if (buffer.Capacity == 0) {
+                            SaveSettingFile();
+                        }
+                        else {
+                            /*
+                             * 最后一步很关键，从配置文件中提取二进制数据反序列化为LocalSetting，
+                             * 然后覆盖掉原有的单例对象，其他文件从 Tool.LocalSetting.LocalSettingInstance
+                             * 读取的对象是新覆盖的对象
+                             */
+                            SetNewInstance(buffer.ToArray().Deserializer<LocalSetting>());
+                        }
+                    }
+            );
+
                 this.DateMode = DateMode.DateWithWhiteSpace;
                 this.SaveMode = SaveMode.OrginalFile;
                 // 获取系统当前主题颜色
@@ -148,11 +193,6 @@ namespace VisualizationRecorder.CommonTool {
                 var uiTheme = systemTheme.GetColorValue(Windows.UI.ViewManagement.UIColorType.Background).ToString();
                 this.Theme = uiTheme == "#FF000000" ? Theme.Dark : Theme.Light;
             }
-            public DateMode DateMode { get; set; }
-            public SaveMode SaveMode { get; set; }
-            public Theme Theme { get; set; }
-
-            public static void SetNewInstance(LocalSetting localSetting) => LocalSettingInstance = localSetting;
         }
     }
 

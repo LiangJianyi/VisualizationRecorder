@@ -7,14 +7,11 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
-using Windows.Storage;
-using Windows.System.Threading;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Navigation;
 using VisualizationRecorder.CommonTool;
-using Janyee.Utilty;
 
 namespace VisualizationRecorder {
     /// <summary>
@@ -26,36 +23,9 @@ namespace VisualizationRecorder {
         /// executed, and as such is the logical equivalent of main() or WinMain().
         /// </summary>
         public App() {
-            AppSetting();
+            Tool.LocalSetting.InitialLocalSetting();
             this.InitializeComponent();
             this.Suspending += OnSuspending;
-        }
-
-        private void AppSetting() {
-            Tool.LocalSetting localSetting = null;
-            TimeSpan delay = TimeSpan.FromSeconds(1);
-            ThreadPoolTimer timer = ThreadPoolTimer.CreateTimer(
-                async (source) => {
-                    // C:\Users\a124p\AppData\Local\Packages\40318JanyeeLiang.30940293423D7_08ek7rcm75gt0\LocalState
-                    StorageFolder localFolder = ApplicationData.Current.LocalFolder;
-                    StorageFile appSettingFile = await localFolder.CreateFileAsync("VisualizationRecorderSetting", CreationCollisionOption.OpenIfExists);
-                    var buffer = await FileIO.ReadBufferAsync(appSettingFile);
-                    // 如果 Capacity==0，表明文件是新创建的，里面没有内容
-                    if (buffer.Capacity == 0) {
-                        localSetting = Tool.LocalSetting.LocalSettingInstance;
-                        byte[] bytes = localSetting.Serializer();
-                        await FileIO.WriteBytesAsync(appSettingFile, bytes);
-                    }
-                    else {
-                        localSetting = buffer.ToArray().Deserializer<Tool.LocalSetting>();
-                        /*
-                         * 最后一步很关键，从配置文件中提取二进制数据反序列化为LocalSetting，
-                         * 然后覆盖掉原有的单例对象，其他文件从 Tool.LocalSetting.LocalSettingInstance
-                         * 读取的对象是新覆盖的对象
-                         */
-                        Tool.LocalSetting.SetNewInstance(localSetting);
-                    }
-                }, delay);
         }
 
         /// <summary>
