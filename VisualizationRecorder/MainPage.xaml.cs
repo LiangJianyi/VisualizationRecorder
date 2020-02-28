@@ -139,7 +139,7 @@ namespace VisualizationRecorder {
                 // _model 为 null 证明用户在空白的状态下添加新条目
                 _model = new StatistTotalByDateTimeModel(
                     lines: new string[] { rectangle.Name },
-                    dateMode: Tool.LocalSetting.LocalSettingInstance.DateMode
+                    dateMode: DateMode.DateWithSlash        // 通过parse方块的名称添加新的datetime，由于方块名称使用斜杠分割日期，这里需要强制使用DateMode.DateWithSlash
                 );
 #if DEBUG
                 ToolTip toolTip = new ToolTip {
