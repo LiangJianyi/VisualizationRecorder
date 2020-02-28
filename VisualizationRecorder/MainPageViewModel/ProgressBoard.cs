@@ -6,7 +6,7 @@ using System.Diagnostics;
 namespace VisualizationRecorder {
     class ProgressBoard {
         private Canvas _progressBoard;
-        private Storyboard _startStoryboard;
+        private Storyboard _animation;
 
         private Canvas CreateProgressBoard(string name) {
             Canvas canvas = new Canvas() {
@@ -77,7 +77,7 @@ namespace VisualizationRecorder {
             }
             HorizontalCenterOnCanvas(progressBoard._progressBoard, parentCanvas);
 
-            progressBoard._startStoryboard = new Storyboard();
+            progressBoard._animation = new Storyboard();
             KeyTime startTime = KeyTime.FromTimeSpan(new TimeSpan(0, 0, 0, 0, 0));
             KeyTime endTime = KeyTime.FromTimeSpan(new TimeSpan(0, 0, 0, 0, 300));
             DoubleAnimationUsingKeyFrames slideAnimationUsingKeyFrames = new DoubleAnimationUsingKeyFrames();
@@ -98,12 +98,12 @@ namespace VisualizationRecorder {
             void StartStoryboard_Completed(object sender, object e) {
                 parentCanvas.Children.Remove(progressBoard._progressBoard);
             }
-            progressBoard._startStoryboard.Completed += StartStoryboard_Completed;
-            progressBoard._startStoryboard.Children.Add(slideAnimationUsingKeyFrames);
+            progressBoard._animation.Completed += StartStoryboard_Completed;
+            progressBoard._animation.Children.Add(slideAnimationUsingKeyFrames);
             Storyboard.SetTarget(slideAnimationUsingKeyFrames, progressBoard._progressBoard);
             Storyboard.SetTargetName(slideAnimationUsingKeyFrames, progressBoard._progressBoard.Name);
             Storyboard.SetTargetProperty(slideAnimationUsingKeyFrames, "(Canvas.Top)");
-            progressBoard._startStoryboard.Begin();
+            progressBoard._animation.Begin();
         }
 
         /// <summary>
