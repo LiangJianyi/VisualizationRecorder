@@ -11,6 +11,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Shapes;
 using Janyee.Utilty;
 using VisualizationRecorder.CommonTool;
+using Windows.UI.Xaml.Media.Animation;
 
 namespace VisualizationRecorder {
     using Debug = System.Diagnostics.Debug;
@@ -506,6 +507,54 @@ namespace VisualizationRecorder {
             else {
                 throw new FilePickFaildException($"错误的文件类型：{_file.FileType}");
             }
+        }
+
+        /// <summary>
+        /// 设置面板滑入主页面
+        /// </summary>
+        private void SettingPanleSlideIn() {
+            Storyboard storyboard = new Storyboard();
+            KeyTime startTime = KeyTime.FromTimeSpan(new TimeSpan(0, 0, 0, 0, 0));
+            KeyTime endTime = KeyTime.FromTimeSpan(new TimeSpan(0, 0, 0, 0, 100));
+            DoubleAnimationUsingKeyFrames slideAnimationUsingKeyFrames = new DoubleAnimationUsingKeyFrames();
+
+            slideAnimationUsingKeyFrames.KeyFrames.Add(new LinearDoubleKeyFrame() {
+                Value = Canvas.GetLeft(SettingPanle),
+                KeyTime = startTime
+            });
+            slideAnimationUsingKeyFrames.KeyFrames.Add(new LinearDoubleKeyFrame() {
+                Value = this.Window.Bounds.Width - SettingPanle.Width,
+                KeyTime = endTime
+            });
+            storyboard.Children.Add(slideAnimationUsingKeyFrames);
+            Storyboard.SetTarget(slideAnimationUsingKeyFrames, SettingPanle);
+            Storyboard.SetTargetName(slideAnimationUsingKeyFrames, SettingPanle.Name);
+            Storyboard.SetTargetProperty(slideAnimationUsingKeyFrames, "(Canvas.Left)");
+            storyboard.Begin();
+        }
+
+        /// <summary>
+        /// 设置面板滑出主页面
+        /// </summary>
+        private void SettingPanleSlideOut() {
+            Storyboard storyboard = new Storyboard();
+            KeyTime startTime = KeyTime.FromTimeSpan(new TimeSpan(0, 0, 0, 0, 0));
+            KeyTime endTime = KeyTime.FromTimeSpan(new TimeSpan(0, 0, 0, 0, 100));
+            DoubleAnimationUsingKeyFrames slideAnimationUsingKeyFrames = new DoubleAnimationUsingKeyFrames();
+
+            slideAnimationUsingKeyFrames.KeyFrames.Add(new LinearDoubleKeyFrame() {
+                Value = Canvas.GetLeft(SettingPanle),
+                KeyTime = startTime
+            });
+            slideAnimationUsingKeyFrames.KeyFrames.Add(new LinearDoubleKeyFrame() {
+                Value = this.Window.Bounds.Width,
+                KeyTime = endTime
+            });
+            storyboard.Children.Add(slideAnimationUsingKeyFrames);
+            Storyboard.SetTarget(slideAnimationUsingKeyFrames, SettingPanle);
+            Storyboard.SetTargetName(slideAnimationUsingKeyFrames, SettingPanle.Name);
+            Storyboard.SetTargetProperty(slideAnimationUsingKeyFrames, "(Canvas.Left)");
+            storyboard.Begin();
         }
     }
 }

@@ -335,16 +335,16 @@ namespace VisualizationRecorder {
 
         private void SettingButton_Click(object sender, RoutedEventArgs e) {
             if (Canvas.GetLeft(SettingPanle) == this.Window.Bounds.Width) {
-                Canvas.SetLeft(SettingPanle, this.Window.Bounds.Width - SettingPanle.Width);
+                SettingPanleSlideIn();
             }
             else {
-                Canvas.SetLeft(SettingPanle, this.Window.Bounds.Width);
+                SettingPanleSlideOut();
             }
         }
 
         private void Page_PointerPressed(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e) {
             if (Canvas.GetLeft(SettingPanle) < this.Window.Bounds.Width) {
-                Canvas.SetLeft(SettingPanle, this.Window.Bounds.Width);
+                SettingPanleSlideOut();
             }
         }
 
