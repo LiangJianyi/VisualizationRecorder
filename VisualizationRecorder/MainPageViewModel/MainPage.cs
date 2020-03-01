@@ -178,7 +178,19 @@ namespace VisualizationRecorder {
         /// </param>
         /// <returns>返回方块矩阵中日期最古老的方块</returns>
         private Rectangle RectanglesLayout(Canvas rectanglesCanvas, DateTime today) {
-            DateTime todayOfLastyear = new DateTime(today.Year - 1, today.Month, today.Day);
+            DateTime todayOfLastyear;
+            // 闰月29日换算为去年3月1日
+            if (DateTime.IsLeapYear(today.Year) == false) {
+                todayOfLastyear = new DateTime(today.Year - 1, today.Month, today.Day);
+            }
+            else {
+                if (today.Month == 2 && today.Day == 29) {
+                    todayOfLastyear = new DateTime(today.Year - 1, 3, 1);
+                }
+                else {
+                    todayOfLastyear = new DateTime(today.Year - 1, today.Month, today.Day);
+                }
+            }
             TimeSpan pastDay = today - todayOfLastyear;
             const int RECT_WIDHT = 10;
             const int RECT_HEIGHT = 10;
