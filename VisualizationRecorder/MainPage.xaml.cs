@@ -267,6 +267,8 @@ namespace VisualizationRecorder {
             SaveFileButton.Visibility = Visibility.Collapsed;
             RefreshButton.Visibility = Visibility.Collapsed;
             ClearButton.Visibility = Visibility.Collapsed;
+            DateWithWhiteSpaceToggleMenuFlyoutItem.IsChecked = Tool.LocalSetting.LocalSettingInstance.DateMode == DateMode.DateWithWhiteSpace;
+            DateWithWhiteSpaceToggleMenuFlyoutItem.IsChecked = !DateWithWhiteSpaceToggleMenuFlyoutItem.IsChecked;
             UpdateMainPageLayout();
         }
 
