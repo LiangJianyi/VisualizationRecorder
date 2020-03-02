@@ -132,6 +132,7 @@ namespace VisualizationRecorder.CommonTool {
             public static void SetNewInstance(LocalSetting localSetting) => LocalSettingInstance = localSetting;
 
             public static void InitialLocalSetting() {
+                // C:\Users\a124p\AppData\Local\Packages\40318JanyeeLiang.30940293423D7_08ek7rcm75gt0\LocalState
                 AppSettingFile = ApplicationData.
                                  Current.
                                  LocalFolder.
