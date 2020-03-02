@@ -126,30 +126,49 @@ namespace VisualizationRecorder {
         internal static StatistTotalByDateTime ParseExpressToStatistTotalByDateTime(string expr, DateMode dateMode) {
             string[] tokens = null;
             switch (dateMode) {
-                case DateMode.DateWithWhiteSpace:
+                case DateMode.DateWithWhiteSpace: {
                     tokens = GetToken(expr, ' ');
-                    break;
-                case DateMode.DateWithSlash:
+                    if (tokens.Length == 3) {
+                        ushort monthValue = StringToUInt16(tokens[0]);
+                        ushort dayValue = Convert.ToUInt16(tokens[1]);
+                        ushort yearValue = Convert.ToUInt16(tokens[2]);
+                        return new StatistTotalByDateTime() { DateTime = new DateTime(yearValue, monthValue, dayValue), Total = 1 };
+                    }
+                    else if (tokens.Length == 4) {
+                        ushort monthValue = StringToUInt16(tokens[0]);
+                        ushort dayValue = Convert.ToUInt16(tokens[1]);
+                        ushort yearValue = Convert.ToUInt16(tokens[2]);
+                        BigInteger total = GetFrequency(tokens[3]);
+                        return new StatistTotalByDateTime() { DateTime = new DateTime(yearValue, monthValue, dayValue), Total = total };
+                    }
+                    else {
+                        throw new ArgumentOutOfRangeException($"Date time format error: {string.Join(' ', tokens)}");
+                    }
+                }
+                case DateMode.DateWithSlash: {
                     tokens = GetToken(expr, '/');
-                    break;
+                    string[] tokensWithYearAndTotal = GetToken(tokens[2], ' ');
+                    if (tokens.Length == 3) {
+                        ushort monthValue = StringToUInt16(tokens[0]);
+                        ushort dayValue = Convert.ToUInt16(tokens[1]);
+                        ushort yearValue = Convert.ToUInt16(tokensWithYearAndTotal[0]);
+                        if (tokensWithYearAndTotal.Length == 2) {
+                            BigInteger total = GetFrequency(tokensWithYearAndTotal[1]);
+                            return new StatistTotalByDateTime() { DateTime = new DateTime(yearValue, monthValue, dayValue), Total = total };
+                        }
+                        else if (tokensWithYearAndTotal.Length == 1) {
+                            return new StatistTotalByDateTime() { DateTime = new DateTime(yearValue, monthValue, dayValue), Total = 1 };
+                        }
+                        else {
+                            throw new ArgumentOutOfRangeException($"Date time format error: {string.Join(' ', tokens)}");
+                        }
+                    }
+                    else {
+                        throw new ArgumentOutOfRangeException($"Date time format error: {string.Join(' ', tokens)}");
+                    }
+                }
                 default:
-                    break;
-            }
-            if (tokens.Length == 3) {
-                ushort monthValue = StringToUInt16(tokens[0]);
-                ushort dayValue = Convert.ToUInt16(tokens[1]);
-                ushort yearValue = Convert.ToUInt16(tokens[2]);
-                return new StatistTotalByDateTime() { DateTime = new DateTime(yearValue, monthValue, dayValue), Total = 1 };
-            }
-            else if (tokens.Length == 4) {
-                ushort monthValue = StringToUInt16(tokens[0]);
-                ushort dayValue = Convert.ToUInt16(tokens[1]);
-                ushort yearValue = Convert.ToUInt16(tokens[2]);
-                BigInteger count = GetFrequency(tokens[3]);
-                return new StatistTotalByDateTime() { DateTime = new DateTime(yearValue, monthValue, dayValue), Total = count };
-            }
-            else {
-                throw new ArgumentOutOfRangeException($"Date time format error: {string.Join(' ', tokens)}");
+                    throw new Exception("Unkown error.");
             }
         }
 
