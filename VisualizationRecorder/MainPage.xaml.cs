@@ -9,12 +9,12 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Shapes;
-using VisualizationRecorder.CommonTool;
 using Windows.UI.Xaml.Navigation;
+using VisualizationRecorder.CommonTool;
 
 namespace VisualizationRecorder {
+    using static VisualizationRecorder.CommonTool.Tool;
     using Debug = System.Diagnostics.Debug;
-    using TioSalamanca = List<IGrouping<BigInteger, StatistTotalByDateTime>>;
 
     public sealed partial class MainPage : Page {
         /// <summary>
@@ -227,10 +227,10 @@ namespace VisualizationRecorder {
                 // 给用户提供两种保存方式：
                 // 1、更新原有文件
                 // 2、作为新文件存储
-                switch (Tool.LocalSetting.LocalSettingInstance.SaveMode) {
+                switch (LocalSetting.LocalSettingInstance.SaveMode) {
                     case SaveMode.NewFile:
                         await SaveNewFileAsync();
-                        Tool.LocalSetting.LocalSettingInstance.SaveMode = SaveMode.OrginalFile;
+                        LocalSetting.LocalSettingInstance.SaveMode = SaveMode.OrginalFile;
                         break;
                     case SaveMode.OrginalFile:
                         ContentDialog saveDialog = new ContentDialog() {
@@ -247,7 +247,7 @@ namespace VisualizationRecorder {
                         break;
                     default:
                         Blink.StopAllBlink();
-                        throw new InvalidOperationException($"Unknown Error. SaveMode = {Tool.LocalSetting.LocalSettingInstance.SaveMode.ToString()}");
+                        throw new InvalidOperationException($"Unknown Error. SaveMode = {LocalSetting.LocalSettingInstance.SaveMode.ToString()}");
                 }
             }
             else {
@@ -267,8 +267,8 @@ namespace VisualizationRecorder {
             SaveFileButton.Visibility = Visibility.Collapsed;
             RefreshButton.Visibility = Visibility.Collapsed;
             ClearButton.Visibility = Visibility.Collapsed;
-            DateWithWhiteSpaceToggleMenuFlyoutItem.IsChecked = Tool.LocalSetting.LocalSettingInstance.DateMode == DateMode.DateWithWhiteSpace;
-            DateWithWhiteSpaceToggleMenuFlyoutItem.IsChecked = !DateWithWhiteSpaceToggleMenuFlyoutItem.IsChecked;
+            DateWithWhiteSpaceToggleMenuFlyoutItem.IsChecked = LocalSetting.LocalSettingInstance.DateMode == DateMode.DateWithWhiteSpace;
+            DateWithSlashToggleMenuFlyoutItem.IsChecked = !DateWithWhiteSpaceToggleMenuFlyoutItem.IsChecked;
             UpdateMainPageLayout();
         }
 
@@ -301,7 +301,7 @@ namespace VisualizationRecorder {
             _model = null;
             _file = null;
             _isBlackPage = true;
-            Tool.LocalSetting.LocalSettingInstance.SaveMode = SaveMode.NewFile;
+            LocalSetting.LocalSettingInstance.SaveMode = SaveMode.NewFile;
             Blink.StopAllBlink();
             RefreshButton.Visibility = Visibility.Collapsed;
             SaveFileButton.Visibility = Visibility.Collapsed;
@@ -358,11 +358,10 @@ namespace VisualizationRecorder {
             ToggleMenuFlyoutItem toggle = sender as ToggleMenuFlyoutItem;
             if (toggle.IsChecked == true) {
                 DateWithSlashToggleMenuFlyoutItem.IsChecked = !toggle.IsChecked;
-
-                Tool.LocalSetting.LocalSettingInstance.DateMode = DateWithSlashToggleMenuFlyoutItem.IsChecked ?
+                LocalSetting.LocalSettingInstance.DateMode = DateWithSlashToggleMenuFlyoutItem.IsChecked ?
                                                         DateMode.DateWithSlash :
                                                         DateMode.DateWithWhiteSpace;
-                Tool.LocalSetting.SaveSettingFile();
+                LocalSetting.SaveSettingFile();
             }
             else {
                 toggle.IsChecked = true;
@@ -373,10 +372,10 @@ namespace VisualizationRecorder {
             ToggleMenuFlyoutItem toggle = sender as ToggleMenuFlyoutItem;
             if (toggle.IsChecked == true) {
                 DateWithWhiteSpaceToggleMenuFlyoutItem.IsChecked = !toggle.IsChecked;
-                Tool.LocalSetting.LocalSettingInstance.DateMode = DateWithWhiteSpaceToggleMenuFlyoutItem.IsChecked ?
+                LocalSetting.LocalSettingInstance.DateMode = DateWithWhiteSpaceToggleMenuFlyoutItem.IsChecked ?
                                                         DateMode.DateWithWhiteSpace :
                                                         DateMode.DateWithSlash;
-                Tool.LocalSetting.SaveSettingFile();
+                LocalSetting.SaveSettingFile();
             }
             else {
                 toggle.IsChecked = true;

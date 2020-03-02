@@ -126,25 +126,33 @@ namespace VisualizationRecorder.CommonTool {
         /// </summary>
         [Serializable]
         public class LocalSetting {
-            private static LocalSetting _localSettingInstance;
-            public static LocalSetting LocalSettingInstance {
-                get {
-                    if (_localSettingInstance == null) {
-                        _localSettingInstance = new LocalSetting();
-                    }
-                    return _localSettingInstance;
-                }
-                private set {
-                    _localSettingInstance = value;
-                }
-            }
+            public static LocalSetting LocalSettingInstance { get; private set; }
             public static StorageFile AppSettingFile { get; set; }
 
             public static void SetNewInstance(LocalSetting localSetting) => LocalSettingInstance = localSetting;
 
             public static void InitialLocalSetting() {
-                if (_localSettingInstance == null) {
-                    _localSettingInstance = new LocalSetting();
+                AppSettingFile = ApplicationData.
+                                 Current.
+                                 LocalFolder.
+                                 CreateFileAsync("VisualizationRecorderSetting", CreationCollisionOption.OpenIfExists).
+                                 GetAwaiter().
+                                 GetResult();
+                IBuffer buffer = FileIO.
+                                 ReadBufferAsync(AppSettingFile).
+                                 GetAwaiter().
+                                 GetResult();
+                if (buffer.Capacity == 0) {
+                    LocalSettingInstance = new LocalSetting();
+                    SaveSettingFile();
+                }
+                else {
+                    /*
+                     * 最后一步很关键，从配置文件中提取二进制数据反序列化为LocalSetting，
+                     * 然后覆盖掉原有的单例对象，其他文件从 Tool.LocalSetting.LocalSettingInstance
+                     * 读取的对象是新覆盖的对象
+                     */
+                    SetNewInstance(buffer.ToArray().Deserializer<LocalSetting>());
                 }
             }
 
@@ -162,27 +170,6 @@ namespace VisualizationRecorder.CommonTool {
             public Theme Theme { get; set; }
 
             private LocalSetting() {
-                Windows.Foundation.IAsyncAction asyncAction = Windows.System.Threading.ThreadPool.RunAsync(
-                    async (source) => {
-                        AppSettingFile = await ApplicationData.
-                                               Current.
-                                               LocalFolder.
-                                               CreateFileAsync("VisualizationRecorderSetting", CreationCollisionOption.OpenIfExists);
-                        IBuffer buffer = await FileIO.ReadBufferAsync(AppSettingFile);
-                        if (buffer.Capacity == 0) {
-                            SaveSettingFile();
-                        }
-                        else {
-                            /*
-                             * 最后一步很关键，从配置文件中提取二进制数据反序列化为LocalSetting，
-                             * 然后覆盖掉原有的单例对象，其他文件从 Tool.LocalSetting.LocalSettingInstance
-                             * 读取的对象是新覆盖的对象
-                             */
-                            SetNewInstance(buffer.ToArray().Deserializer<LocalSetting>());
-                        }
-                    }
-            );
-
                 this.DateMode = DateMode.DateWithWhiteSpace;
                 this.SaveMode = SaveMode.OrginalFile;
                 // 获取系统当前主题颜色
