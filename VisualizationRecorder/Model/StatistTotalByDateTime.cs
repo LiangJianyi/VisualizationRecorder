@@ -69,7 +69,14 @@ namespace VisualizationRecorder {
                 default:
                     throw new ArgumentOutOfRangeException("Month out of range.", $"Month = {DateTime.Month}");
             }
-            return $"{month} {DateTime.Day} {DateTime.Year} x{Total}";
+            switch (Tool.LocalSetting.LocalSettingInstance.DateMode) {
+                case DateMode.DateWithWhiteSpace:
+                    return $"{month} {DateTime.Day} {DateTime.Year} x{Total}";
+                case DateMode.DateWithSlash:
+                    return $"{month}/{DateTime.Day}/{DateTime.Year} x{Total}";
+                default:
+                    throw new Exception("Unkown error.");
+            }
         }
         /// <summary>
         /// 比较两个 StatistTotalByDateTime 对象的相等性
@@ -246,6 +253,6 @@ namespace VisualizationRecorder {
         /// 转换为 StatistTotalByDateTime 数组
         /// </summary>
         /// <returns></returns>
-        public StatistTotalByDateTime[] ToStatistTotalByDateTimeArray()=> (from statistTotalByDateTime in this._entries select statistTotalByDateTime.Value).ToArray();
+        public StatistTotalByDateTime[] ToStatistTotalByDateTimeArray() => (from statistTotalByDateTime in this._entries select statistTotalByDateTime.Value).ToArray();
     }
 }
