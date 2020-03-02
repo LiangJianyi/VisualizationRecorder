@@ -147,7 +147,6 @@ namespace VisualizationRecorder {
                     tag.Loaded += (object sender, RoutedEventArgs e) => {
                         for (int i = 1; i < tagList.Count - 1; i++) {
                             if (Canvas.GetLeft(tagList[i].Tag) - Canvas.GetLeft(tagList[i - 1].Tag) - tagList[i - 1].Tag.ActualWidth <= 0) {
-                                Debug.WriteLine($"Canvas.GetLeft(list[{i}].Tag) - Canvas.GetLeft(list[{i - 1}].Tag) - list[{i - 1}].Tag.ActualWidth = {Canvas.GetLeft(tagList[i].Tag)} - {Canvas.GetLeft(tagList[i - 1].Tag)} - {tagList[i - 1].Tag.ActualWidth} = {Canvas.GetLeft(tagList[i].Tag) - Canvas.GetLeft(tagList[i - 1].Tag) - tagList[i - 1].Tag.ActualWidth}");
                                 Canvas.SetLeft(tagList[i].Tag, Canvas.GetLeft(tagList[i].Tag) + tagList[i].TagedRect.Width);
                             }
                         }
@@ -467,14 +466,6 @@ namespace VisualizationRecorder {
                     Name = $"OldRectanglesCanvas_{canvasOrdinal}"
                 };
                 Rectangle oldRect = this.RectanglesLayout(oldRectanglesCanvas, DatetimeParser.ParseExpressToDateTime(earliestRectangle.Name, DateMode.DateWithSlash).AddDays(-1));
-                oldRectanglesCanvas.Loaded += (object sender, RoutedEventArgs e) => {
-                    Canvas canvas = sender as Canvas;
-                    foreach (var item in canvas.Children) {
-                        if (item is TextBlock tag) {
-                            Debug.WriteLine($"tag.ActualWidth: {tag.ActualWidth}");
-                        }
-                    }
-                };
                 this.StackCanvas.Children.Insert(0, oldRectanglesCanvas);
                 List<StatistTotalByDateTime> newOldRecorders = EarlierThanEarliestRectangle(oldRecorders, oldRect);
                 ExtendStackCanvasByFilterOldRecorders(newOldRecorders, oldRect, canvasOrdinal + 1);

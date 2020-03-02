@@ -164,15 +164,6 @@ namespace VisualizationRecorder {
                                                                                                  orderby newgroup.Key
                                                                                                  select newgroup;
 
-#if DEBUG
-            Debug.WriteLine("Executing GroupDateTimesByDiff...");
-            foreach (var item in groupingForTotal) {
-                Debug.WriteLine(item.Key);
-                foreach (var subitem in item) {
-                    Debug.WriteLine($"  {subitem}");
-                }
-            }
-#endif
             // 一个级别有若干个Key；一个Key有若干条记录
             // levelByTotal 指示每个级别有多少个 Key（groupingForTotal根据Total分组出来的Key）
             TioSalamanca levels = null;
@@ -184,13 +175,6 @@ namespace VisualizationRecorder {
                 // keysForEachLevel 表示每个级别应包含多少个 item.Key
                 BigInteger keysForEachLevel = groups / 5;
                 BigInteger remain = groups % 5;
-
-#if DEBUG
-                Debug.WriteLine($"groups: {groups}");
-                Debug.WriteLine($"keysForEachLevel: {keysForEachLevel}");
-                Debug.WriteLine($"remain: {remain}");
-#endif
-
                 TioSalamanca[] entries = new TioSalamanca[5];
                 BigInteger keyIncre = 0;
                 // entriesIncre 没有必要使用 BigInteger，因为不管有多少个 Key，分成多少个 group，
