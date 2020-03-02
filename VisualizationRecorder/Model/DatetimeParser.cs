@@ -6,7 +6,6 @@ using VisualizationRecorder.CommonTool;
 
 [assembly: InternalsVisibleTo("VisualizationRecorderTest")]
 namespace VisualizationRecorder {
-
     static class DatetimeParser {
         /// <summary>
         /// 转换月份的简写为对应的整数
@@ -55,7 +54,7 @@ namespace VisualizationRecorder {
                         return Convert.ToUInt16(month);
                     }
                     else {
-                        throw new ArgumentException($"Month acronym error: {month}");
+                        throw new DatetimeParserException($"Month acronym error: {month}");
                     }
             }
         }
@@ -87,7 +86,7 @@ namespace VisualizationRecorder {
                 case 12:
                     return "Dec";
                 default:
-                    throw new ArgumentException($"Month number acronym error: {month}");
+                    throw new DatetimeParserException($"Month number acronym error: {month}");
             }
         }
 
@@ -113,7 +112,7 @@ namespace VisualizationRecorder {
                 return 1;
             }
             else {
-                throw new ArgumentException("Repeatable incrementor formal error.");
+                throw new DatetimeParserException("Repeatable incrementor formal error.");
             }
         }
 
@@ -142,13 +141,13 @@ namespace VisualizationRecorder {
                         return new StatistTotalByDateTime() { DateTime = new DateTime(yearValue, monthValue, dayValue), Total = total };
                     }
                     else {
-                        throw new ArgumentOutOfRangeException($"Date time format error: {string.Join(' ', tokens)}");
+                        throw new DatetimeParserException($"Date time format error: {string.Join(' ', tokens)}");
                     }
                 }
                 case DateMode.DateWithSlash: {
                     tokens = GetToken(expr, '/');
-                    string[] tokensWithYearAndTotal = GetToken(tokens[2], ' ');
                     if (tokens.Length == 3) {
+                        string[] tokensWithYearAndTotal = GetToken(tokens[2], ' ');
                         ushort monthValue = StringToUInt16(tokens[0]);
                         ushort dayValue = Convert.ToUInt16(tokens[1]);
                         ushort yearValue = Convert.ToUInt16(tokensWithYearAndTotal[0]);
@@ -160,11 +159,11 @@ namespace VisualizationRecorder {
                             return new StatistTotalByDateTime() { DateTime = new DateTime(yearValue, monthValue, dayValue), Total = 1 };
                         }
                         else {
-                            throw new ArgumentOutOfRangeException($"Date time format error: {string.Join(' ', tokens)}");
+                            throw new DatetimeParserException($"Date time format error: {string.Join(' ', tokens)}");
                         }
                     }
                     else {
-                        throw new ArgumentOutOfRangeException($"Date time format error: {string.Join(' ', tokens)}");
+                        throw new DatetimeParserException($"Date time format error: {string.Join(' ', tokens)}");
                     }
                 }
                 default:
@@ -201,7 +200,7 @@ namespace VisualizationRecorder {
                 return new DateTime(yearValue, monthValue, dayValue);
             }
             else {
-                throw new ArgumentOutOfRangeException($"Date time format error: {string.Join(' ', tokens)}");
+                throw new DatetimeParserException($"Date time format error: {string.Join(' ', tokens)}");
             }
         }
 
@@ -213,5 +212,10 @@ namespace VisualizationRecorder {
         internal static IEnumerable<string> SplitByLine(string text) {
             return text.Split('\n');
         }
+    }
+
+    class DatetimeParserException : Exception {
+        public DatetimeParserException() { }
+        public DatetimeParserException(string message) : base(message) { }
     }
 }
