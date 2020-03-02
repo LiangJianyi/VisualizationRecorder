@@ -9,9 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BigIntegerExtension", "..\S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuckerInterpreter", "..\SundryUtilty\.NET Standard\Sucker\SuckerInterpreter\SuckerInterpreter.csproj", "{2DD5F2C5-E0E9-4001-830B-1F8836B868C7}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TxtRecordGenerator", "TxtRecordGenerator\TxtRecordGenerator.vcxproj", "{A187AA84-AD9F-46F3-8E61-82C47B7568E5}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerializerDeserializerExtensions", "..\SundryUtilty\.NET Standard\SerializerDeserializerExtensions\SerializerDeserializerExtensions.csproj", "{CC96C059-9C5A-405A-BBC7-B6295D40179F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SerializerDeserializerExtensions", "..\SundryUtilty\.NET Standard\SerializerDeserializerExtensions\SerializerDeserializerExtensions.csproj", "{CC96C059-9C5A-405A-BBC7-B6295D40179F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -95,28 +93,6 @@ Global
 		{2DD5F2C5-E0E9-4001-830B-1F8836B868C7}.Release|x64.Build.0 = Release|Any CPU
 		{2DD5F2C5-E0E9-4001-830B-1F8836B868C7}.Release|x86.ActiveCfg = Release|Any CPU
 		{2DD5F2C5-E0E9-4001-830B-1F8836B868C7}.Release|x86.Build.0 = Release|Any CPU
-		{A187AA84-AD9F-46F3-8E61-82C47B7568E5}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{A187AA84-AD9F-46F3-8E61-82C47B7568E5}.Debug|ARM.ActiveCfg = Debug|ARM
-		{A187AA84-AD9F-46F3-8E61-82C47B7568E5}.Debug|ARM.Build.0 = Debug|ARM
-		{A187AA84-AD9F-46F3-8E61-82C47B7568E5}.Debug|ARM.Deploy.0 = Debug|ARM
-		{A187AA84-AD9F-46F3-8E61-82C47B7568E5}.Debug|ARM64.ActiveCfg = Debug|Win32
-		{A187AA84-AD9F-46F3-8E61-82C47B7568E5}.Debug|x64.ActiveCfg = Debug|x64
-		{A187AA84-AD9F-46F3-8E61-82C47B7568E5}.Debug|x64.Build.0 = Debug|x64
-		{A187AA84-AD9F-46F3-8E61-82C47B7568E5}.Debug|x64.Deploy.0 = Debug|x64
-		{A187AA84-AD9F-46F3-8E61-82C47B7568E5}.Debug|x86.ActiveCfg = Debug|Win32
-		{A187AA84-AD9F-46F3-8E61-82C47B7568E5}.Debug|x86.Build.0 = Debug|Win32
-		{A187AA84-AD9F-46F3-8E61-82C47B7568E5}.Debug|x86.Deploy.0 = Debug|Win32
-		{A187AA84-AD9F-46F3-8E61-82C47B7568E5}.Release|Any CPU.ActiveCfg = Release|Win32
-		{A187AA84-AD9F-46F3-8E61-82C47B7568E5}.Release|ARM.ActiveCfg = Release|ARM
-		{A187AA84-AD9F-46F3-8E61-82C47B7568E5}.Release|ARM.Build.0 = Release|ARM
-		{A187AA84-AD9F-46F3-8E61-82C47B7568E5}.Release|ARM.Deploy.0 = Release|ARM
-		{A187AA84-AD9F-46F3-8E61-82C47B7568E5}.Release|ARM64.ActiveCfg = Release|Win32
-		{A187AA84-AD9F-46F3-8E61-82C47B7568E5}.Release|x64.ActiveCfg = Release|x64
-		{A187AA84-AD9F-46F3-8E61-82C47B7568E5}.Release|x64.Build.0 = Release|x64
-		{A187AA84-AD9F-46F3-8E61-82C47B7568E5}.Release|x64.Deploy.0 = Release|x64
-		{A187AA84-AD9F-46F3-8E61-82C47B7568E5}.Release|x86.ActiveCfg = Release|Win32
-		{A187AA84-AD9F-46F3-8E61-82C47B7568E5}.Release|x86.Build.0 = Release|Win32
-		{A187AA84-AD9F-46F3-8E61-82C47B7568E5}.Release|x86.Deploy.0 = Release|Win32
 		{CC96C059-9C5A-405A-BBC7-B6295D40179F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CC96C059-9C5A-405A-BBC7-B6295D40179F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC96C059-9C5A-405A-BBC7-B6295D40179F}.Debug|ARM.ActiveCfg = Debug|Any CPU
