@@ -74,7 +74,7 @@ namespace VisualizationRecorder {
                         this.ClearButton.Visibility = Visibility.Visible;
                     }
                 }
-                catch (ArgumentException err) {
+                catch (DatetimeParserException err) {
                     PopErrorDialogAsync(err.Message);
                 }
                 catch (FilePickFaildException err) {
